@@ -1,0 +1,89 @@
+@use 'tokens' as *;
+@use 'mixins' as *;
+
+body {
+  font-family: $font-body;
+  font-size: $fs-body;
+  font-weight: $fw-regular;
+  line-height: $lh-base;
+  // Горизонтальной прокрутки на странице быть не должно ни при какой ширине
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4 {
+  font-weight: $fw-semibold;
+  line-height: $lh-tight;
+  color: $c-brown-700;
+  text-wrap: balance;
+}
+
+h1 { font-size: $fs-h1; letter-spacing: -0.02em; }
+h2 { font-size: $fs-h2; letter-spacing: -0.01em; }
+h3 { font-size: $fs-h3; }
+h4 { font-size: $fs-h4; }
+
+p { text-wrap: pretty; }
+
+:root {
+  // Дублируем ключевые цвета в CSS-переменные: пригодится для точечных
+  // переопределений из разметки без пересборки стилей.
+  --c-green-800: #{$c-green-800};
+  --c-tan-500: #{$c-tan-500};
+  --c-brown-900: #{$c-brown-900};
+  --header-h: #{$header-h};
+  --hdr-h: 56px;
+}
+
+// Служебные утилиты, которых не хватает в каждом втором компоненте
+.visually-hidden { @include visually-hidden; }
+
+.container { @include container; }
+
+// Ссылка «к содержанию» для клавиатурной навигации
+.skip-link {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -120%);
+  z-index: 1000;
+  padding: 10px 20px;
+  background: $c-green-800;
+  color: $c-white;
+  border-radius: 0 0 $radius-md $radius-md;
+  transition: transform $transition;
+
+  &:focus { transform: translate(-50%, 0); }
+}
+
+
+// --- Появление при прокрутке ------------------------------------------------
+// Класс вешает директива v-reveal уже в браузере (app/plugins/reveal.client.ts).
+// Значения перенесены с анимаций действующего сайта.
+.reveal {
+  opacity: 0;
+  transition:
+    opacity 0.5s cubic-bezier(0.19, 1, 0.22, 1),
+    transform 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+  will-change: opacity, transform;
+}
+
+.reveal--right { transform: translateX(-100px); }
+.reveal--left  { transform: translateX(100px); }
+.reveal--zoom  { transform: scale(0.9); }
+
+// «Проявление» на сайте заметно медленнее переездов — секунда против половины
+.reveal--fade { transition-duration: 1s; }
+
+.reveal.is-revealed {
+  opacity: 1;
+  transform: none;
+  will-change: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal, .reveal.is-revealed {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}

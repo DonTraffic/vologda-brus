@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+
+# Служебные адреса конструктора в индексе не нужны
+Disallow: /_nuxt/
+
+Host: https://vologda-brus.ru
+Sitemap: https://vologda-brus.ru/sitemap.xml
+
+# Метки рекламных кампаний не должны плодить копии страниц
+Clean-param: utm_source&utm_medium&utm_campaign&utm_term&utm_content&etext&ysclid&gclid&yclid

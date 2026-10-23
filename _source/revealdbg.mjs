@@ -1,0 +1,13 @@
+import puppeteer from 'puppeteer-core'
+const b = await puppeteer.launch({ executablePath:'/usr/bin/chromium', headless:'new', args:['--no-sandbox','--disable-gpu','--hide-scrollbars'] })
+const p = await b.newPage()
+await p.setViewport({ width:1920, height:1000 })
+await p.goto('http://127.0.0.1:8181/',{waitUntil:'networkidle2',timeout:120000})
+await new Promise(r=>setTimeout(r,800))
+console.log('после загрузки:', await p.evaluate(()=>({ reveal: document.querySelectorAll('.reveal').length, on: document.querySelectorAll('.is-revealed').length })))
+await p.evaluate(async()=>{for(let y=0;y<document.body.scrollHeight;y+=300){window.scrollTo(0,y);await new Promise(r=>setTimeout(r,250))}window.scrollTo(0,0)})
+await new Promise(r=>setTimeout(r,1200))
+console.log('после прокрутки:', await p.evaluate(()=>({ reveal: document.querySelectorAll('.reveal').length, on: document.querySelectorAll('.is-revealed').length })))
+const left = await p.evaluate(()=>[...document.querySelectorAll('.reveal:not(.is-revealed)')].slice(0,5).map(e=>e.className+' | '+(e.textContent||'').trim().slice(0,30)))
+console.log('не проявились:', left)
+await b.close()

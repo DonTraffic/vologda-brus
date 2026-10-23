@@ -1,0 +1,10 @@
+import puppeteer from 'puppeteer-core'
+const b = await puppeteer.launch({ executablePath:'/usr/bin/chromium', headless:'new', args:['--no-sandbox','--disable-gpu','--hide-scrollbars'] })
+const p = await b.newPage()
+p.on('console', m => console.log('[console]', m.type(), m.text().slice(0,300)))
+p.on('pageerror', e => console.log('[pageerror]', String(e).slice(0,400)))
+await p.setViewport({ width:1920, height:1000 })
+await p.goto(process.argv[2],{waitUntil:'networkidle2',timeout:120000})
+await new Promise(r=>setTimeout(r,1500))
+console.log('высота:', await p.evaluate(()=>document.body.scrollHeight))
+await b.close()

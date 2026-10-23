@@ -1,0 +1,12 @@
+import puppeteer from 'puppeteer-core'
+const [url] = process.argv.slice(2)
+const b = await puppeteer.launch({ executablePath:'/usr/bin/chromium', headless:'new', args:['--no-sandbox','--disable-gpu','--hide-scrollbars'] })
+const p = await b.newPage()
+await p.setViewport({ width:1200, height:1000 })
+await p.goto(url,{waitUntil:'networkidle2',timeout:120000})
+await p.evaluate(async()=>{for(let y=0;y<document.body.scrollHeight;y+=500){window.scrollTo(0,y);await new Promise(r=>setTimeout(r,120))}window.scrollTo(0,0);await new Promise(r=>setTimeout(r,1500))})
+const bad = await p.evaluate(()=>[...document.images].filter(i=>!i.complete||i.naturalWidth===0).map(i=>i.currentSrc||i.src||i.getAttribute('src')))
+console.log('всего картинок:', await p.evaluate(()=>document.images.length))
+console.log('не загрузились:', bad.length)
+for (const s of bad.slice(0,10)) console.log('  ', s)
+await b.close()
