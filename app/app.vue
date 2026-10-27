@@ -32,9 +32,11 @@ const organisation = computed(() => ({
   sameAs: SOCIAL.map(s => s.href),
   legalName: LEGAL.name,
   taxID: LEGAL.inn,
-  // ОГРНИП — государственный регистрационный номер, в schema.org для этого
-  // есть отдельное свойство; ИНН остаётся в taxID.
-  ...(LEGAL.ogrnip ? { vatID: LEGAL.ogrnip, identifier: LEGAL.ogrnip } : {}),
+  // ОГРНИП — государственный регистрационный номер, его место в identifier.
+  // В vatID он стоять не должен: это поле для номера плательщика НДС, а ИП
+  // на упрощёнке НДС не платит — поисковик получал бы заведомо неверные
+  // сведения о компании.
+  ...(LEGAL.ogrnip ? { identifier: LEGAL.ogrnip } : {}),
 }))
 
 useHead({

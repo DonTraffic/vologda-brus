@@ -9,8 +9,14 @@
  */
 export function useMessengerModal() {
   const isOpen = useState('messenger-modal', () => false)
+  const { reachGoal } = useAnalytics()
 
-  function open() { isOpen.value = true }
+  function open() {
+    isOpen.value = true
+    // Окно открывают кнопки-призывы и лид-магниты — это ближайший к заявке
+    // шаг, который видно до перехода в сам мессенджер.
+    reachGoal(GOALS.messengerModal)
+  }
   function close() { isOpen.value = false }
 
   return { isOpen, open, close }

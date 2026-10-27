@@ -31,7 +31,7 @@ useSeo({
     <section id="feed" class="feed">
       <ul class="feed__grid" role="list">
         <li v-for="p in POSTS" :key="p.slug" class="card">
-          <NuxtLink :to="`/blog/${p.slug}`" class="card__link">
+          <NuxtLink :to="`/blog/${p.slug}/`" class="card__link">
             <span v-if="p.cover" class="card__thumb">
               <SmartImage :name="p.cover" :alt="p.title" cover sizes="(min-width: 1024px) 300px, 100vw" />
             </span>

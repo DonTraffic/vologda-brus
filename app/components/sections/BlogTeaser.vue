@@ -13,7 +13,7 @@ const latest = computed(() => POSTS.slice(0, 3))
           v-for="(p, i) in latest" :key="p.slug" class="bl__post"
           v-reveal="{ style: 'zoom', delay: i * 0.16 }"
         >
-          <NuxtLink :to="`/blog/${p.slug}`" class="bl__link">
+          <NuxtLink :to="`/blog/${p.slug}/`" class="bl__link">
             <div v-if="p.cover" class="bl__thumb">
               <SmartImage :name="p.cover" :alt="p.title" cover sizes="(min-width: 1024px) 300px, 90vw" />
             </div>

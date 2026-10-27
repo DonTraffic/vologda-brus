@@ -19,7 +19,7 @@ function validate() {
 }
 async function onSubmit() {
   if (!validate()) return
-  await submit({ formName: 'Консультация эксперта', ...form }, honeypot.value)
+  await submit({ formName: 'Консультация эксперта', ...form }, honeypot.value, GOALS.formConsult)
 }
 </script>
 
@@ -66,7 +66,7 @@ async function onSubmit() {
       <p class="cs__note">
         {{ CONSULT_FORM.note }}<br>
         Нажимая на кнопку, вы соглашаетесь с
-        <NuxtLink to="/privacy-policy">политикой конфиденциальности</NuxtLink>
+        <NuxtLink to="/privacy-policy/">политикой конфиденциальности</NuxtLink>
       </p>
     </form>
   </ZeroStage>

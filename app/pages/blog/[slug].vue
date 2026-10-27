@@ -35,7 +35,7 @@ useHead({
         datePublished: p.date,
         author: { '@type': 'Organization', name: COMPANY.name },
         publisher: { '@type': 'Organization', name: COMPANY.name },
-        mainEntityOfPage: `${base}/blog/${p.slug}`,
+        mainEntityOfPage: `${base}/blog/${p.slug}/`,
         ...(p.cover ? { image: `${base}/images/${p.cover}.jpg` } : {}),
       }),
     },
@@ -58,7 +58,7 @@ const lines = (text: string) => text.split('\n')
       <nav class="post__crumbs" aria-label="Хлебные крошки">
         <NuxtLink to="/">Главная</NuxtLink>
         <span aria-hidden="true">/</span>
-        <NuxtLink to="/blog">Блог</NuxtLink>
+        <NuxtLink to="/blog/">Блог</NuxtLink>
       </nav>
 
       <h1 class="post__title">{{ p.title }}</h1>
@@ -86,7 +86,7 @@ const lines = (text: string) => text.split('\n')
         <h2 class="post__more-title">Смотрите также</h2>
         <ul class="post__more-list" role="list">
           <li v-for="o in others" :key="o.slug" class="rel">
-            <NuxtLink :to="`/blog/${o.slug}`" class="rel__link">
+            <NuxtLink :to="`/blog/${o.slug}/`" class="rel__link">
               <span v-if="o.cover" class="rel__thumb">
                 <SmartImage :name="o.cover" :alt="o.title" cover sizes="100px" />
               </span>

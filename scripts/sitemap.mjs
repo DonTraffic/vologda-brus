@@ -2,8 +2,17 @@
 // попало в сборку, а не из списка, который легко забыть обновить.
 import { readdir, writeFile, stat, readFile } from 'node:fs/promises'
 import { join, relative } from 'node:path'
+import { existsSync } from 'node:fs'
 
-const DIST = 'dist'
+// Папка собранной статики.
+//
+// Раньше здесь стояло 'dist' — это символическая ссылка на .output/public,
+// которая лежит только на машине разработчика: она в .gitignore и ведёт по
+// абсолютному пути. На сборке из GitHub (App Platform в Timeweb Cloud)
+// такой папки нет, скрипт падал, и sitemap.xml не создавался вовсе — именно
+// поэтому на сайте его нет, хотя в ТЗ он значится сделанным.
+// Берём настоящий путь сборки, а ссылку оставляем как запасной вариант.
+const DIST = existsSync('.output/public') ? '.output/public' : 'dist'
 const SITE = (process.env.NUXT_PUBLIC_SITE_URL || 'https://vologda-brus.ru').replace(/\/$/, '')
 const SKIP = new Set(['200.html', '404.html'])
 
@@ -30,7 +39,13 @@ for (const f of files) {
   const rel = relative(DIST, f).replaceAll('\\', '/')
   if (SKIP.has(rel)) continue
   if (await isNoindex(f)) continue
-  const route = rel === 'index.html' ? '/' : '/' + rel.replace(/\/index\.html$/, '').replace(/\.html$/, '')
+  // Адреса со слешем на конце — в том виде, в котором их отдаёт хостинг и в
+  // котором они стоят в canonical. Без слеша веб-сервер App Platform
+  // переадресует запрос кодом 308, и в карте оказались бы адреса,
+  // переадресующие на другие.
+  const route = rel === 'index.html'
+    ? '/'
+    : '/' + rel.replace(/\/index\.html$/, '').replace(/\.html$/, '') + '/'
   const { mtime } = await stat(f)
   urls.push({ loc: `${SITE}${route}`, lastmod: mtime.toISOString().slice(0, 10) })
 }

@@ -15,7 +15,7 @@ function validate() {
 }
 async function onSubmit() {
   if (!validate()) return
-  await submit({ formName: 'Расчёт стоимости и скидка 10%', ...form }, honeypot.value)
+  await submit({ formName: 'Расчёт стоимости и скидка 10%', ...form }, honeypot.value, GOALS.formCalc)
 }
 </script>
 
@@ -58,7 +58,7 @@ async function onSubmit() {
 
       <p class="cf__consent">
         Нажимая на кнопку, вы даёте согласие на обработку персональных данных и соглашаетесь с
-        <NuxtLink to="/privacy-policy">политикой конфиденциальности</NuxtLink>
+        <NuxtLink to="/privacy-policy/">политикой конфиденциальности</NuxtLink>
       </p>
     </form>
     </div>

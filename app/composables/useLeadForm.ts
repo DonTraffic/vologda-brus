@@ -14,13 +14,21 @@ export interface LeadPayload {
 export function useLeadForm() {
   const config = useRuntimeConfig()
   const endpoint = computed(() => config.public.formEndpoint as string)
+  const { reachGoal } = useAnalytics()
 
   const state = ref<'idle' | 'sending' | 'done' | 'error'>('idle')
   const errorText = ref('')
 
-  async function submit(payload: LeadPayload, honeypot: string) {
+  /**
+   * @param goal имя цели аналитики — отправляется только при успешном приёме
+   *             заявки. Имена собраны в GOALS (`useAnalytics`), в интерфейсе
+   *             Метрики цель создаётся с тем же идентификатором.
+   */
+  async function submit(payload: LeadPayload, honeypot: string, goal?: string) {
     // Скрытое поле, которое заполняют только роботы. Защиты от спама
     // на текущем сайте нет вообще ни на одной форме.
+    // Роботу показываем успех, но цель не отмечаем — иначе статистика заявок
+    // наполнится спамом.
     if (honeypot) {
       state.value = 'done'
       return
@@ -41,6 +49,7 @@ export function useLeadForm() {
         body: { ...payload, page: useRoute().fullPath },
       })
       state.value = 'done'
+      if (goal) reachGoal(goal, { form: payload.formName })
     } catch {
       state.value = 'error'
       errorText.value = 'Не удалось отправить. Позвоните нам или напишите в мессенджер.'

@@ -38,7 +38,7 @@ function toTop() { window.scrollTo({ top: 0, behavior: 'smooth' }) }
       Цены уточняйте по телефону
     </p>
 
-    <NuxtLink to="/privacy-policy" class="ft__policy">Политика конфиденциальности</NuxtLink>
+    <NuxtLink to="/privacy-policy/" class="ft__policy">Политика конфиденциальности</NuxtLink>
     <button type="button" class="ft__top" @click="toTop">Наверх</button>
   </ZeroStage>
 </template>

@@ -24,7 +24,7 @@ function accept() {
     <aside v-if="isVisible" class="cookie" aria-label="Уведомление о cookies">
       <p class="cookie__text">
         {{ COOKIE.text }}
-        <NuxtLink to="/privacy-policy" class="cookie__link">Политика конфиденциальности</NuxtLink>
+        <NuxtLink to="/privacy-policy/" class="cookie__link">Политика конфиденциальности</NuxtLink>
       </p>
       <BaseButton variant="light" size="md" @click="accept">{{ COOKIE.accept }}</BaseButton>
     </aside>
