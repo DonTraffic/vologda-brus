@@ -1,33 +1,32 @@
 <script setup lang="ts">
 import { PROJECTS } from '~/data/content'
 
+/**
+ * Проекты: вкладки, крупный кадр и миниатюры под ним.
+ *
+ * Раскладка как в оригинале: слева большая фотография, справа описание,
+ * под фотографией лента миниатюр. Миниатюра переключает крупный кадр,
+ * клик по крупному кадру открывает снимок во весь экран.
+ *
+ * Фиксированных координат здесь нет: ширины заданы долями сетки, высота
+ * растёт по содержимому. Поэтому длинный текст проекта не наезжает на
+ * соседние блоки, а на узком экране колонки просто встают друг под друга.
+ */
 const activeId = ref(PROJECTS.items[0]!.id)
 const tabRefs = ref<HTMLButtonElement[]>([])
 const active = computed(() => PROJECTS.items.find(p => p.id === activeId.value)!)
 const activeIndex = computed(() => PROJECTS.items.findIndex(p => p.id === activeId.value))
 
-// Высота панели меняется от вкладки к вкладке. Чтобы страница не прыгала,
-// обёртка держит измеренную высоту и доводит её до новой плавно.
-const pane = ref<HTMLElement | null>(null)
-const paneH = ref(0)
-const boxStyle = computed(() => (paneH.value ? { height: `${paneH.value}px` } : undefined))
+/** Какой снимок показан крупно. Сбрасывается при смене проекта. */
+const shot = ref(0)
+watch(activeId, () => { shot.value = 0 })
 
-let ro: ResizeObserver | null = null
-const measure = () => { if (pane.value) paneH.value = pane.value.offsetHeight }
-
-onMounted(() => {
-  ro = new ResizeObserver(measure)
-  watchEffect(() => {
-    ro?.disconnect()
-    if (pane.value) ro?.observe(pane.value)
-  })
-})
-onBeforeUnmount(() => ro?.disconnect())
+/** Номер снимка в полноэкранном окне, -1 — окно закрыто. */
+const zoom = ref(-1)
 
 function goTab(delta: number) {
   const n = PROJECTS.items.length
-  const next = (activeIndex.value + delta + n) % n
-  activeId.value = PROJECTS.items[next]!.id
+  activeId.value = PROJECTS.items[(activeIndex.value + delta + n) % n]!.id
 }
 
 function onTabKey(e: KeyboardEvent, index: number) {
@@ -42,111 +41,157 @@ function onTabKey(e: KeyboardEvent, index: number) {
   activeId.value = PROJECTS.items[next]!.id
   tabRefs.value[next]?.focus()
 }
-
-// Горизонтальные координаты вкладок, стрелок и линии сняты с макета 1200
-const TAB_X = [221, 352, 479, 598, 693, 848]
 </script>
 
 <template>
-  <div id="projects">
-    <!-- Шапка с вкладками — отдельный блок фиксированной высоты, как в макете -->
-    <ZeroStage :height="250" bg="#ffffff">
+  <section id="projects" class="pj">
+    <div class="pj__inner">
       <h2 class="pj__title">{{ PROJECTS.kicker }}</h2>
 
-      <button type="button" class="pj__arrow pj__arrow--prev" aria-label="Предыдущий проект" @click="goTab(-1)">
-        <svg width="17" height="28" viewBox="0 0 17 28" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-          <path d="M15 2 3 14l12 12" stroke-linecap="round" stroke-linejoin="round" />
-        </svg>
-      </button>
+      <div class="pj__bar">
+        <button type="button" class="pj__arrow" aria-label="Предыдущий проект" @click="goTab(-1)">
+          <svg viewBox="0 0 17 28" width="17" height="28" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M15 2 3 14l12 12" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </button>
 
-      <div class="pj__tabs" role="tablist" aria-label="Наши проекты">
-        <button
-          v-for="(p, i) in PROJECTS.items"
-          :id="`tab-${p.id}`"
-          :key="p.id"
-          ref="tabRefs"
-          type="button"
-          role="tab"
-          class="pj__tab"
-          :class="{ 'pj__tab--active': p.id === activeId }"
-          :style="`--x: ${TAB_X[i]}px`"
-          :aria-selected="p.id === activeId"
-          :tabindex="p.id === activeId ? 0 : -1"
-          :aria-controls="`panel-${p.id}`"
-          @click="activeId = p.id"
-          @keydown="onTabKey($event, i)"
-        >
-          {{ p.tab }}
+        <div class="pj__tabs" role="tablist" aria-label="Наши проекты">
+          <button
+            v-for="(p, i) in PROJECTS.items"
+            :id="`tab-${p.id}`"
+            :key="p.id"
+            ref="tabRefs"
+            type="button"
+            role="tab"
+            class="pj__tab"
+            :class="{ 'pj__tab--active': p.id === activeId }"
+            :aria-selected="p.id === activeId"
+            :tabindex="p.id === activeId ? 0 : -1"
+            :aria-controls="`panel-${p.id}`"
+            @click="activeId = p.id"
+            @keydown="onTabKey($event, i)"
+          >
+            {{ p.tab }}
+          </button>
+        </div>
+
+        <button type="button" class="pj__arrow" aria-label="Следующий проект" @click="goTab(1)">
+          <svg viewBox="0 0 17 28" width="17" height="28" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="m2 2 12 12L2 26" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
         </button>
       </div>
 
-      <span class="pj__rule" aria-hidden="true" />
+      <div
+        :id="`panel-${active.id}`"
+        class="pj__panel"
+        role="tabpanel"
+        :aria-labelledby="`tab-${active.id}`"
+        tabindex="0"
+      >
+        <div v-if="active.gallery.length" class="pj__media">
+          <button
+            type="button"
+            class="pj__hero"
+            :aria-label="`Открыть фото ${shot + 1} во весь экран`"
+            @click="zoom = shot"
+          >
+            <SmartImage
+              :key="active.gallery[shot]"
+              :name="active.gallery[shot]!"
+              :alt="`${active.title} — фото ${shot + 1}`"
+              cover
+              sizes="(min-width: 1024px) 62vw, 100vw"
+            />
+          </button>
 
-      <button type="button" class="pj__arrow pj__arrow--next" aria-label="Следующий проект" @click="goTab(1)">
-        <svg width="17" height="28" viewBox="0 0 17 28" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-          <path d="m2 2 12 12L2 26" stroke-linecap="round" stroke-linejoin="round" />
-        </svg>
-      </button>
-    </ZeroStage>
-
-    <!-- Содержимое вкладки: заголовок и описание сверху, под ними галерея.
-         Раскладка одинаковая у всех проектов, поэтому при переключении
-         ничего не перескакивает. -->
-    <section
-      :id="`panel-${active.id}`"
-      class="pjp"
-      role="tabpanel"
-      :aria-labelledby="`tab-${active.id}`"
-      tabindex="0"
-    >
-      <div class="pjp__box" :style="boxStyle">
-        <Transition name="pjp">
-          <div :key="active.id" ref="pane" class="pjp__pane">
-            <div class="pjp__inner">
-              <h3 class="pjp__name">{{ active.title }}</h3>
-              <p v-if="active.subtitle" class="pjp__sub">{{ active.subtitle }}</p>
-              <p v-for="(para, i) in active.paragraphs" :key="i" class="pjp__para">{{ para }}</p>
-
-              <ul
-                v-if="active.gallery.length"
-                class="pjp__gallery"
-                :class="{ 'pjp__gallery--dense': active.gallery.length > 4 }"
-                role="list"
+          <ul v-if="active.gallery.length > 1" class="pj__thumbs" role="list">
+            <li v-for="(g, i) in active.gallery" :key="g">
+              <button
+                type="button"
+                class="pj__thumb"
+                :class="{ 'pj__thumb--active': i === shot }"
+                :aria-label="`Показать фото ${i + 1}`"
+                :aria-current="i === shot ? 'true' : undefined"
+                @click="shot = i"
               >
-                <li v-for="(g, i) in active.gallery" :key="g" class="pjp__shot">
-                  <SmartImage
-                    :name="g"
-                    :alt="`${active.title} — фото ${i + 1}`"
-                    cover
-                    sizes="(min-width: 1201px) 560px, (min-width: 980px) 460px, 100vw"
-                  />
-                </li>
-              </ul>
-            </div>
-          </div>
-        </Transition>
+                <SmartImage :name="g" :alt="''" cover sizes="110px" />
+              </button>
+            </li>
+          </ul>
+        </div>
+
+        <div class="pj__text">
+          <h3 class="pj__name">{{ active.title }}</h3>
+          <p v-if="active.subtitle" class="pj__sub">{{ active.subtitle }}</p>
+          <p v-for="(para, i) in active.paragraphs" :key="i" class="pj__para">{{ para }}</p>
+        </div>
       </div>
-    </section>
-  </div>
+    </div>
+
+    <Lightbox
+      :images="active.gallery"
+      :index="zoom"
+      :caption="active.title"
+      @close="zoom = -1"
+      @update:index="zoom = $event"
+    />
+  </section>
 </template>
 
 <style scoped lang="scss">
 .pj {
+  background: $c-white;
+  padding-block: clamp(40px, 6vw, 76px) clamp(40px, 5vw, 64px);
+
+  &__inner { @include t-container; }
+
   &__title {
+    margin: 0 0 clamp(20px, 3vw, 36px);
     font-size: clamp(1.5rem, 1.2rem + 1.2vw, 32px);
     font-weight: $fw-medium;
-    line-height: 50px;
-    margin-bottom: $space-md;
+    line-height: 1.3;
     text-align: center;
   }
 
-  &__tabs { display: flex; flex-wrap: wrap; justify-content: center; gap: $space-xs; }
+  // Полоса вкладок: стрелки по краям, вкладки по центру, линия снизу
+  &__bar {
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+    gap: clamp(4px, 1.5vw, 16px);
+    padding-bottom: 10px;
+    border-bottom: 2px solid $c-tan-500;
+    margin-bottom: clamp(24px, 3vw, 40px);
+  }
+
+  &__arrow {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 32px;
+    color: $c-brown-700;
+    transition: color $transition;
+    @include focus-ring;
+
+    &:hover { color: $c-green-800; }
+  }
+
+  &__tabs {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 4px clamp(4px, 1.2vw, 14px);
+    min-width: 0;
+  }
 
   &__tab {
-    padding: 9px 16px;
-    font-size: 14px;
+    padding: 10px 12px;
+    font-size: clamp(0.8125rem, 0.78rem + 0.2vw, 14px);
     font-weight: $fw-semibold;
-    line-height: 21.7px;
+    line-height: 1.3;
+    text-align: center;
     color: $c-brown-700;
     border: 1px solid transparent;
     transition: color $transition, border-color $transition;
@@ -156,102 +201,95 @@ const TAB_X = [221, 352, 479, 598, 693, 848]
     &--active { color: $c-green-800; border-color: $c-tan-500; }
   }
 
-  // Стрелки и линия — часть макета, на узком экране не нужны
-  &__arrow, &__rule { display: none; }
-
-  @include up(lg) {
-    &__title { @include place((x: 303px, y: 66px, w: 601px, h: 50px)); font-size: 32px; margin: 0; }
-
-    &__tabs { display: contents; }
-
-    &__tab {
-      position: absolute;
-      top: 140px;
-      left: var(--x);
-      padding: 16px 6px;
-      text-align: center;
-    }
-
-    // Две последние вкладки длиннее остальных: в макете они занимают
-    // фиксированные 125 px и переносятся на вторую строку
-    &__tab:nth-child(n + 5) { width: 125px; padding-block: 4px; }
-
-    &__arrow {
-      position: absolute;
-      top: 155px;
-      display: grid;
-      place-items: center;
-      width: 17px;
-      height: 28px;
-      color: $c-brown-700;
-      transition: color $transition;
-      @include focus-ring;
-
-      &:hover { color: $c-green-800; }
-      &--prev { left: 150px; }
-      &--next { left: 1033px; }
-    }
-
-    &__rule {
-      @include place((x: 148px, y: 200px, w: 899px, h: 2px));
-      display: block;
-      background: $c-tan-500;
-    }
-  }
-}
-
-.pjp {
-  background: $c-white;
-  padding-bottom: 45px;
-  @include focus-ring;
-
-  // Обёртка держит измеренную высоту: при переключении вкладки она
-  // доезжает до новой, а не меняется скачком
-  &__box {
-    position: relative;
-    transition: height 0.35s ease;
-  }
-
-  &__pane { width: 100%; }
-
-  &__inner { @include t-container; }
-
-  &__name { margin: 0; font-size: 20px; font-weight: $fw-semibold; line-height: 1.35; color: $c-brown-900; }
-  &__sub { margin: 12px 0 0; font-size: clamp(1rem, 0.95rem + 0.3vw, 20px); line-height: 1.45; color: $c-brown-900; }
-  &__para { margin: 12px 0 0; font-size: clamp(0.9375rem, 0.9rem + 0.2vw, 16px); line-height: 1.55; color: rgba($c-brown-900, 0.85); }
-
-  &__gallery {
+  // Две колонки на широком экране, одна на узком
+  &__panel {
     display: grid;
-    gap: 20px;
-    margin: 30px 0 0;
-    padding: 0;
-    list-style: none;
+    gap: clamp(20px, 3vw, 40px);
+    @include focus-ring;
 
-    @media (min-width: #{$t-bp-lg}) { grid-template-columns: repeat(2, 1fr); }
-    @media (min-width: #{$t-bp-xl}) { gap: 40px; }
-
-    &--dense {
-      @media (min-width: #{$t-bp-lg}) { grid-template-columns: repeat(3, 1fr); }
+    @include up(lg) {
+      grid-template-columns: minmax(0, 1.9fr) minmax(260px, 1fr);
+      align-items: start;
     }
   }
 
-  &__shot {
-    aspect-ratio: 4 / 3;
+  &__media { min-width: 0; }
+
+  &__hero {
+    display: block;
+    width: 100%;
+    aspect-ratio: 3 / 2;
     overflow: hidden;
     background: $c-sand;
+    cursor: zoom-in;
+    @include focus-ring;
+
+    :deep(picture) { display: block; width: 100%; height: 100%; }
+
+    :deep(img) {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+
+    &:hover :deep(img) { transform: scale(1.02); }
+  }
+
+  &__thumbs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 8px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  &__thumb {
+    display: block;
+    width: clamp(64px, 9vw, 96px);
+    aspect-ratio: 3 / 2;
+    overflow: hidden;
+    background: $c-sand;
+    opacity: 0.65;
+    outline-offset: 2px;
+    transition: opacity $transition, box-shadow $transition;
+    @include focus-ring;
 
     :deep(picture) { display: block; width: 100%; height: 100%; }
     :deep(img) { width: 100%; height: 100%; object-fit: cover; }
+
+    &:hover { opacity: 1; }
+    &--active { opacity: 1; box-shadow: inset 0 0 0 2px $c-green-800; }
+  }
+
+  &__text { min-width: 0; }
+
+  &__name {
+    margin: 0;
+    font-size: clamp(1.125rem, 1rem + 0.5vw, 22px);
+    font-weight: $fw-semibold;
+    line-height: 1.35;
+    color: $c-brown-900;
+  }
+
+  &__sub {
+    margin: 12px 0 0;
+    font-size: clamp(1rem, 0.95rem + 0.3vw, 18px);
+    line-height: 1.5;
+    color: $c-brown-900;
+  }
+
+  &__para {
+    margin: 14px 0 0;
+    font-size: clamp(0.9375rem, 0.9rem + 0.2vw, 16px);
+    line-height: 1.55;
+    color: rgba($c-brown-900, 0.85);
   }
 }
 
-// Смена вкладки: уходящая панель растворяется поверх приходящей
-.pjp-enter-active, .pjp-leave-active { transition: opacity 0.3s ease; }
-.pjp-leave-active { position: absolute; inset: 0; }
-.pjp-enter-from, .pjp-leave-to { opacity: 0; }
-
 @media (prefers-reduced-motion: reduce) {
-  .pjp__box { transition: none; }
-  .pjp-enter-active, .pjp-leave-active { transition: none; }
+  .pj__hero :deep(img) { transition: none; }
+  .pj__hero:hover :deep(img) { transform: none; }
 }
 </style>

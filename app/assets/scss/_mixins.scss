@@ -109,3 +109,50 @@ $breakpoints: (xs: $bp-xs, sm: $bp-sm, md: $bp-md, lg: $bp-lg, xl: $bp-xl);
     @if map.has-key($spec, h) { height: map.get($spec, h); }
   }
 }
+
+// Переключатель-«таблетка»: радиокнопка, выглядящая как кнопка.
+//
+// Сам input остаётся в разметке и в потоке фокуса — его видят клавиатура
+// и программа чтения с экрана, — но нарисован не он, а соседний <span>.
+// Цвета берутся из переменных, чтобы одна и та же таблетка работала
+// и на тёмном фоне формы расчёта, и на светлом в форме консультации.
+//
+// Разметка: <label class="…"><input type="radio"><span>Текст</span></label>
+@mixin chip {
+  position: relative;
+  cursor: pointer;
+
+  input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: 0;
+    opacity: 0;
+  }
+
+  span {
+    display: block;
+    padding: 11px 18px;
+    font-size: 15px;
+    font-weight: $fw-medium;
+    line-height: 1.25;
+    text-align: center;
+    color: var(--chip-fg);
+    background: var(--chip-bg);
+    border: 1px solid var(--chip-bd);
+    transition: color $transition, background-color $transition, border-color $transition;
+  }
+
+  &:hover span { border-color: var(--chip-bd-on); }
+
+  input:checked + span {
+    color: var(--chip-fg-on);
+    background: var(--chip-bg-on);
+    border-color: var(--chip-bd-on);
+  }
+
+  input:focus-visible + span {
+    outline: 2px solid var(--chip-ring);
+    outline-offset: 2px;
+  }
+}
