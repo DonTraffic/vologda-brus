@@ -19,7 +19,10 @@ const SLOT = ['check', 'bath', 'house'] as const
         <SmartImage :name="item.image" :alt="item.title" cover sizes="(min-width: 1024px) 560px, 100vw" />
       </div>
       <h3 class="lm__name">{{ item.title }}</h3>
-      <button type="button" class="lm__get" @click="openMessengers()">{{ LEAD_MAGNETS.cta }}</button>
+      <!-- Настоящая ссылка на форму консультации, а окно выбора мессенджера —
+           надстройка поверх: при отключённых скриптах человек попадает к форме,
+           а не остаётся с мёртвой кнопкой. Образец — первый экран. -->
+      <a href="#consult" class="lm__get" @click.prevent="openMessengers()">{{ LEAD_MAGNETS.cta }}</a>
     </div>
   </ZeroStage>
 </template>
@@ -44,6 +47,10 @@ const SLOT = ['check', 'bath', 'house'] as const
 
   // Не кнопка, а текстовая ссылка с подчёркиванием — как в макете
   &__get {
+    // Ссылка, а не кнопка: эти две строки возвращают ровно ту рамку и то
+    // выравнивание, которые <button> давал сам, без правил в оформлении
+    display: inline-block;
+    text-align: center;
     font-size: 16px;
     font-weight: $fw-medium;
     line-height: 24.8px;

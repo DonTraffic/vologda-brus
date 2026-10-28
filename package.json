@@ -4,8 +4,12 @@
   "type": "module",
   "scripts": {
     "dev": "node scripts/copy-maplibre.mjs && nuxt dev",
+    "prebuild": "node scripts/copy-maplibre.mjs",
     "build": "nuxt build",
-    "generate": "node scripts/copy-maplibre.mjs && nuxt generate && node scripts/fix-404.mjs && node scripts/sitemap.mjs",
+    "postbuild": "node scripts/fix-404.mjs && node scripts/sitemap.mjs",
+    "pregenerate": "node scripts/copy-maplibre.mjs",
+    "generate": "nuxt generate",
+    "postgenerate": "node scripts/fix-404.mjs && node scripts/sitemap.mjs",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare && node scripts/copy-maplibre.mjs",
     "copy:maplibre": "node scripts/copy-maplibre.mjs"

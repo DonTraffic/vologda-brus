@@ -35,7 +35,9 @@ const { el: track, scrollByCards } = useCarousel({ interval: 5000, gap: 40 })
           <h3 class="pr__name">{{ p.title }}</h3>
           <p class="pr__text">{{ p.text }}</p>
           <NuxtLink v-if="p.href" :to="p.href" class="pr__cta">{{ p.cta }}</NuxtLink>
-          <button v-else type="button" class="pr__cta" @click="openMessengers()">{{ p.cta }}</button>
+          <!-- У карточек без своей страницы призыв ведёт к форме расчёта,
+               а окно выбора мессенджера перехватывает клик поверх неё -->
+          <a v-else href="#calc" class="pr__cta" @click.prevent="openMessengers()">{{ p.cta }}</a>
         </div>
       </li>
     </ul>
@@ -122,6 +124,9 @@ const { el: track, scrollByCards } = useCarousel({ interval: 5000, gap: 40 })
   &__text { margin-top: 4px; font-size: 16px; line-height: 23px; }
 
   &__cta {
+    // И NuxtLink, и обычная ссылка — рамку задаём сами, как было у <button>
+    display: inline-block;
+    text-align: center;
     align-self: flex-start;
     margin-top: auto;
     padding: 8px 15px;

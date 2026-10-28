@@ -115,7 +115,12 @@ function onTabKey(e: KeyboardEvent, index: number) {
                 :aria-current="i === shot ? 'true' : undefined"
                 @click="shot = i"
               >
-                <SmartImage :name="g" :alt="''" cover sizes="110px" />
+                <!-- Подпись нужна поиску по картинкам: миниатюра — это
+                     единственное место, где кадры 2…6 попадают в разметку
+                     (крупно показан только выбранный). Программе чтения с
+                     экрана подпись не мешает: имя кнопке даёт aria-label,
+                     он перекрывает содержимое. -->
+                <SmartImage :name="g" :alt="`${active.title} — фото ${i + 1}`" cover sizes="110px" />
               </button>
             </li>
           </ul>

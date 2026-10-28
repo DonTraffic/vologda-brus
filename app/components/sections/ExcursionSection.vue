@@ -21,14 +21,15 @@ const { open: openMessengers } = useMessengerModal()
 
   <!-- Призыв во всю ширину: тонкие линии сверху и снизу — это тени кнопки -->
   <div class="excbtn">
-    <button type="button" class="excbtn__btn" v-reveal="'right'" @click="openMessengers()">
+    <!-- Ссылка на форму записи, окно мессенджеров — надстройка поверх -->
+    <a href="#consult" class="excbtn__btn" v-reveal="'right'" @click.prevent="openMessengers()">
       <span class="excbtn__text">{{ EXCURSION.cta }}</span>
       <span class="excbtn__icon" aria-hidden="true">
         <svg width="33" height="33" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
           <path d="m9 5 7 7-7 7" stroke-linecap="round" stroke-linejoin="round" />
         </svg>
       </span>
-    </button>
+    </a>
   </div>
 </template>
 
@@ -75,6 +76,8 @@ const { open: openMessengers } = useMessengerModal()
     display: flex;
     align-items: center;
     justify-content: center;
+    // Ссылка вместо кнопки: выравнивание <button> задавал сам
+    text-align: center;
     gap: 18px;
     width: 100%;
     padding: 43px 55px;

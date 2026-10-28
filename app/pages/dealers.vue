@@ -58,7 +58,8 @@ const WHY = [
             Работаем с застройщиками, производителями и дилерами.
           </p>
           <div class="dealers__actions">
-            <BaseButton variant="primary" size="lg" @click="openMessengers()">
+            <!-- Ссылка на форму внизу страницы, окно мессенджеров — поверх -->
+            <BaseButton href="#consult" variant="primary" size="lg" @click.prevent="openMessengers()">
               Запросить условия
             </BaseButton>
             <BaseButton :href="`tel:${PHONE_HREF}`" variant="ghost" size="lg" class="dealers__phone">

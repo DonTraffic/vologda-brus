@@ -12,10 +12,20 @@ const form = reactive({
 const honeypot = ref('')
 const errors = reactive<Record<string, string>>({})
 
+// Куда писать ответ. Подпись и подсказка зависят от выбранного способа
+// связи — как в форме расчёта: для телефона нужен номер, для мессенджера ник.
+const isPhone = computed(() => form.way === 'Телефон')
+const contactLabel = computed(() => (isPhone.value ? 'Номер телефона' : `Ник в ${form.way}`))
+const contactHint = computed(() => (isPhone.value ? '+7 900 000-00-00' : '@username'))
+
 function validate() {
   errors.name = form.name.trim().length < 2 ? 'Укажите имя' : ''
+  // Без контакта заявка бесполезна: способ связи выбран, а связаться нечем.
+  errors.contact = form.contact.trim().length < 5
+    ? (isPhone.value ? 'Укажите номер телефона' : 'Укажите ник')
+    : ''
   errors.question = form.question.trim().length < 5 ? 'Напишите, что хотите узнать' : ''
-  return !errors.name && !errors.question
+  return !errors.name && !errors.contact && !errors.question
 }
 async function onSubmit() {
   if (!validate()) return
@@ -60,6 +70,15 @@ async function onSubmit() {
             </div>
           </fieldset>
 
+          <div class="cs__field">
+            <label class="cs__lbl" for="cs-contact">{{ contactLabel }}</label>
+            <input
+              id="cs-contact" v-model="form.contact" class="cs__in" name="contact"
+              :type="isPhone ? 'tel' : 'text'" :autocomplete="isPhone ? 'tel' : 'off'"
+              :placeholder="contactHint" :aria-invalid="!!errors.contact || undefined"
+            >
+          </div>
+
           <fieldset class="cs__field cs__field--set">
             <legend class="cs__lbl">{{ CONSULT_FORM.expertLabel }}</legend>
             <p class="cs__hint">{{ CONSULT_FORM.expertHint }}</p>
@@ -82,8 +101,8 @@ async function onSubmit() {
             <input v-model="honeypot" type="text" tabindex="-1" autocomplete="off">
           </div>
 
-          <p v-if="errors.name || errors.question || state === 'error'" class="cs__err" role="alert">
-            {{ errors.name || errors.question || errorText }}
+          <p v-if="errors.name || errors.contact || errors.question || state === 'error'" class="cs__err" role="alert">
+            {{ errors.name || errors.contact || errors.question || errorText }}
           </p>
 
           <div class="cs__foot">

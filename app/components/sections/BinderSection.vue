@@ -24,7 +24,9 @@ const { open: openMessengers } = useMessengerModal()
         <ul class="bn__list">
           <li v-for="f in BINDER.features" :key="f">{{ f }}.</li>
         </ul>
-        <button type="button" class="bn__cta" @click="openMessengers()">{{ BINDER.cta }}</button>
+        <!-- Ссылка на форму расчёта, окно мессенджеров — надстройка поверх.
+             См. первый экран: без скриптов призыв всё равно ведёт к заявке. -->
+        <a href="#calc" class="bn__cta" @click.prevent="openMessengers()">{{ BINDER.cta }}</a>
       </div>
     </div>
   </section>
@@ -64,6 +66,9 @@ const { open: openMessengers } = useMessengerModal()
   &__list { margin: 0; padding-left: 20px; font-size: 18px; line-height: 27.9px; }
 
   &__cta {
+    // Ссылка, а не кнопка: эти две строки держат ту же рамку, что у <button>
+    display: inline-block;
+    text-align: center;
     margin-top: clamp($space-lg, 5vw, 85px);
     padding: 15px 30px;
     font-size: 15px;

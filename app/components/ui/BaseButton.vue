@@ -23,7 +23,11 @@ const props = withDefaults(defineProps<{
 
 const target = computed(() => props.to || props.href || '')
 const isExternal = computed(() => /^(https?:)?\/\//.test(target.value) || /^(tel|mailto):/.test(target.value))
-const isInternalRoute = computed(() => !!target.value && !isExternal.value)
+// Ссылка вида "#consult" — это якорь на той же странице. Отдавать её в
+// NuxtLink нельзя: маршрутизатор разберёт её как путь и ссылка перестанет
+// указывать на блок. Такие адреса уходят в обычный <a>.
+const isHash = computed(() => target.value.startsWith('#'))
+const isInternalRoute = computed(() => !!target.value && !isExternal.value && !isHash.value)
 
 const classes = computed(() => [
   'btn',
