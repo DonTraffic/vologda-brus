@@ -3,7 +3,7 @@ withDefaults(defineProps<{
   title: string
   kicker?: string
   subtitle?: string
-  /** Уровень заголовка. На странице должен быть ровно один h1. */
+
   level?: 2 | 3
   align?: 'left' | 'center'
   invert?: boolean

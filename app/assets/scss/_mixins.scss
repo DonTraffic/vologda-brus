@@ -1,7 +1,6 @@
 @use 'sass:map';
 @use 'tokens' as *;
 
-// Медиавыражения «от ширины и выше» — проектируем от телефона к десктопу.
 $breakpoints: (xs: $bp-xs, sm: $bp-sm, md: $bp-md, lg: $bp-lg, xl: $bp-xl);
 
 @mixin up($name) {
@@ -16,8 +15,6 @@ $breakpoints: (xs: $bp-xs, sm: $bp-sm, md: $bp-md, lg: $bp-lg, xl: $bp-xl);
   @media (max-width: $w - 0.02px) { @content; }
 }
 
-// Контейнер с гарантированным боковым отступом: на телефоне ровно 16px,
-// на больших экранах — шире, но содержимое не упирается в край.
 @mixin container($max: $container-max) {
   width: 100%;
   max-width: $max;
@@ -28,11 +25,6 @@ $breakpoints: (xs: $bp-xs, sm: $bp-sm, md: $bp-md, lg: $bp-lg, xl: $bp-xl);
   @include up(lg) { padding-inline: $gutter-lg; }
 }
 
-// Сетка Тильды. У неё три десктопных раскладки, и это видно по вёрстке:
-//   > 1200px — контейнер 1200, колонка 1160, три карточки по 360 с шагом 40;
-//   980–1200 — контейнер  960, колонка  940, три карточки по 300 с шагом 20;
-//   < 980px  — контейнер  640, карточки в одну колонку.
-// Без этого на широком экране всё оказывается уже оригинала.
 @mixin t-container {
   width: 100%;
   margin-inline: auto;
@@ -47,7 +39,6 @@ $breakpoints: (xs: $bp-xs, sm: $bp-sm, md: $bp-md, lg: $bp-lg, xl: $bp-xl);
   @media (min-width: #{$t-bp-xl}) { width: 1200px; }
 }
 
-// Три колонки в сетке Тильды: шаг 20 на средней раскладке, 40 на широкой
 @mixin t-cols-3 {
   display: grid;
   gap: $t-gap-sm;
@@ -57,19 +48,16 @@ $breakpoints: (xs: $bp-xs, sm: $bp-sm, md: $bp-md, lg: $bp-lg, xl: $bp-xl);
   @media (min-width: #{$t-bp-xl}) { column-gap: $t-gap-lg; }
 }
 
-// Вертикальные отбивки секции
 @mixin section-padding {
   padding-block: clamp(48px, 6vw, 112px);
 }
 
-// Автосетка карточек без ручных медиавыражений под каждое число колонок
 @mixin auto-grid($min: 280px, $gap: $space-md) {
   display: grid;
   gap: $gap;
   grid-template-columns: repeat(auto-fit, minmax(min(#{$min}, 100%), 1fr));
 }
 
-// Обрезка текста по числу строк
 @mixin clamp-lines($n: 2) {
   display: -webkit-box;
   -webkit-line-clamp: $n;
@@ -77,7 +65,6 @@ $breakpoints: (xs: $bp-xs, sm: $bp-sm, md: $bp-md, lg: $bp-lg, xl: $bp-xl);
   overflow: hidden;
 }
 
-// Видимо только скринридеру — для подписей, которые не нужны глазами
 @mixin visually-hidden {
   position: absolute;
   width: 1px; height: 1px;
@@ -88,7 +75,6 @@ $breakpoints: (xs: $bp-xs, sm: $bp-sm, md: $bp-md, lg: $bp-lg, xl: $bp-xl);
   border: 0;
 }
 
-// Заметная рамка фокуса с клавиатуры — её на текущем сайте нет вообще
 @mixin focus-ring($color: $c-green-800) {
   &:focus-visible {
     outline: 2px solid $color;
@@ -96,10 +82,6 @@ $breakpoints: (xs: $bp-xs, sm: $bp-sm, md: $bp-md, lg: $bp-lg, xl: $bp-xl);
   }
 }
 
-// Ставит элемент по координатам, снятым с макета Тильды.
-// Отсчёт — от левого края центрированной сетки и от верха блока 700px.
-// Применяется только внутри .stage, то есть абсолют ограничен одной секцией,
-// а не размазан по всей странице, как в исходнике.
 @mixin place($spec, $with-size: true) {
   position: absolute;
   left: map.get($spec, x);
@@ -110,14 +92,6 @@ $breakpoints: (xs: $bp-xs, sm: $bp-sm, md: $bp-md, lg: $bp-lg, xl: $bp-xl);
   }
 }
 
-// Переключатель-«таблетка»: радиокнопка, выглядящая как кнопка.
-//
-// Сам input остаётся в разметке и в потоке фокуса — его видят клавиатура
-// и программа чтения с экрана, — но нарисован не он, а соседний <span>.
-// Цвета берутся из переменных, чтобы одна и та же таблетка работала
-// и на тёмном фоне формы расчёта, и на светлом в форме консультации.
-//
-// Разметка: <label class="…"><input type="radio"><span>Текст</span></label>
 @mixin chip {
   position: relative;
   cursor: pointer;

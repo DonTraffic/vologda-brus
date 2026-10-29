@@ -11,8 +11,6 @@ watch(isMenuOpen, (v) => {
 })
 onBeforeUnmount(() => { if (import.meta.client) document.body.style.overflow = '' })
 
-// В шапке — только Telegram и MAX, как в оригинале; WhatsApp живёт
-// во всплывающем окне и в подвале.
 const headerMessengers = computed(() => MESSENGERS.filter(m => m.id !== 'whatsapp'))
 </script>
 
@@ -39,8 +37,6 @@ const headerMessengers = computed(() => MESSENGERS.filter(m => m.id !== 'whatsap
           </li>
         </ul>
 
-        <!-- Ведёт к блоку экскурсии и форме записи: на текущем сайте
-             эта кнопка набирала телефон -->
         <NuxtLink to="/#excursion" class="hdr__cta">
           Посетить производство
         </NuxtLink>
@@ -69,13 +65,11 @@ const headerMessengers = computed(() => MESSENGERS.filter(m => m.id !== 'whatsap
 </template>
 
 <style scoped lang="scss">
-// Шапка лежит поверх фотографии первого экрана, как в оригинале,
-// поэтому она не sticky и не имеет собственной высоты в потоке.
+
 .hdr {
   --hdr-h: 56px;
   @include up(lg) { --hdr-h: 70px; }
-  // Поверх первого экрана, не занимая места в потоке: так фотография
-  // начинается от самого верха окна, как в макете.
+
   position: absolute;
   inset: 0 0 auto;
   z-index: 50;
@@ -90,8 +84,6 @@ const headerMessengers = computed(() => MESSENGERS.filter(m => m.id !== 'whatsap
     min-height: 56px;
     padding-inline: $gutter;
 
-    // Шапка оригинала: полоса 70 px, поля 20 px, логотип 90×51,
-    // значки мессенджеров 30 px, кнопка 228×40.
     @include up(lg) { min-height: 70px; padding-inline: 20px; }
   }
 
@@ -112,7 +104,6 @@ const headerMessengers = computed(() => MESSENGERS.filter(m => m.id !== 'whatsap
     @include up(lg) { width: 90px; height: auto; }
   }
 
-  // Слоган набран очень мелко — ровно как в макете, 10px
   &__slogan {
     display: none;
     font-size: 10px;
@@ -144,7 +135,6 @@ const headerMessengers = computed(() => MESSENGERS.filter(m => m.id !== 'whatsap
 
   &__msgs { display: none; gap: 8px; list-style: none; margin: 0; padding: 0; @include up(md) { display: flex; } @include up(lg) { gap: 12px; } }
 
-  // Значок сам по себе — залитый круг, подложка ему не нужна
   &__msg {
     display: grid;
     place-items: center;

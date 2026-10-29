@@ -14,7 +14,7 @@ watch(isOpen, async (open) => {
   document.body.style.overflow = open ? 'hidden' : ''
   if (open) {
     await nextTick()
-    // Переводим фокус внутрь окна, иначе с клавиатуры в него не попасть
+
     dialog.value?.querySelector<HTMLElement>('a, button')?.focus()
   }
 })

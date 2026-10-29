@@ -3,8 +3,7 @@ import { POLICY_PARTS, POLICY_OPERATOR } from '~/data/policy'
 import { EMAIL } from '~/data/site'
 
 useSeo({
-  // На Тильде заголовок этой страницы — «политика конф», с маленькой буквы
-  // и с обрезанным словом.
+
   title: 'Политика конфиденциальности',
   description:
     'Как Вологда Брус обрабатывает и защищает персональные данные посетителей сайта в соответствии с 152-ФЗ.',
@@ -13,7 +12,6 @@ useSeo({
 const config = useRuntimeConfig()
 const site = (config.public.siteUrl as string).replace(/\/$/, '')
 
-/** Подставляем актуальный адрес сайта вместо метки в тексте документа. */
 const render = (t: string) => t.replace(/\{\{SITE\}\}/g, site)
 </script>
 
@@ -22,11 +20,6 @@ const render = (t: string) => t.replace(/\{\{SITE\}\}/g, site)
     <div class="policy__inner">
       <h1 class="policy__title">Политика конфиденциальности</h1>
 
-      <!--
-        Оператор берётся из самого документа, а не из реквизитов компании:
-        в тексте политики назван другой предприниматель — см. пометку
-        в app/data/policy.ts.
-      -->
       <p class="policy__meta">
         Оператор: {{ POLICY_OPERATOR.name }}, ИНН {{ POLICY_OPERATOR.inn }}<span v-if="POLICY_OPERATOR.ogrnip">, ОГРНИП {{ POLICY_OPERATOR.ogrnip }}</span>.
         Вопросы по обработке данных — <a :href="`mailto:${EMAIL}`">{{ EMAIL }}</a>.

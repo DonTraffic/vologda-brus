@@ -11,7 +11,7 @@ useSeo({
 
 <template>
   <div class="blog">
-    <!-- Первый экран: фотография во всю ширину, затемнение и заголовок -->
+
     <section class="cover">
       <div class="cover__img">
         <SmartImage name="blog-hero" alt="" priority cover sizes="100vw" />
@@ -45,8 +45,7 @@ useSeo({
 </template>
 
 <style scoped lang="scss">
-// Раскладка снята со страницы блога на Тильде: экран-обложка 700 px,
-// лента в три колонки по 300 px с шагом 20 px, картинка карточки 300×231.
+
 .cover {
   position: relative;
   display: flex;
@@ -60,8 +59,6 @@ useSeo({
   color: $c-white;
   background: $c-black;
 
-  // В оригинале содержимое выровнено по центру всей высоты экрана,
-  // поэтому своих вертикальных полей у блока нет.
   @include up(lg) { min-height: 700px; padding: 0 130px; }
 
   @media (min-width: #{$t-bp-xl}) { padding-inline: 380px; }
@@ -96,8 +93,6 @@ useSeo({
     letter-spacing: 0.5px;
     color: inherit;
 
-    // В оригинале под заголовком остаётся воздух, и за счёт него весь
-    // стопкой выровненный блок стоит выше середины экрана.
     @include up(lg) { padding-bottom: 62px; }
   }
 

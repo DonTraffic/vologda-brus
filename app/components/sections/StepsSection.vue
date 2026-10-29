@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { STEPS } from '~/data/content'
 
-/** В текстах шагов есть переносы строк — на сайте они видны. */
 const lines = (t: string) => t.split('\n')
 </script>
 
@@ -12,7 +11,7 @@ const lines = (t: string) => t.split('\n')
 
       <ol class="st__grid">
         <li v-for="(s, i) in STEPS.items" :key="s.title" class="st__item">
-          <!-- Кружок с номером появляется проявлением, текст — выездом слева -->
+
           <div class="st__numwrap" v-reveal="{ style: 'fade' }">
             <span class="st__num">{{ i + 1 }}</span>
             <span v-if="i < STEPS.items.length - 1" class="st__line" aria-hidden="true" />
@@ -35,9 +34,7 @@ const lines = (t: string) => t.split('\n')
 </template>
 
 <style scoped lang="scss">
-// Блок t1106 действующего сайта: поля 60/75, заголовок 36 с отбивкой 105,
-// кружок 34 + белая рамка 2, линия 2px бежевая от кружка до следующего,
-// заголовок шага 18/24,3 с отступом 20, текст 14/21,7 с отступом 16.
+
 .st {
   background: $c-green-800;
   padding-block: clamp(40px, 4.5vw, 60px) clamp(40px, 5vw, 75px);
@@ -81,9 +78,6 @@ const lines = (t: string) => t.split('\n')
     border-radius: 50%;
   }
 
-  // Линия тянется от кружка до кружка следующей карточки, поэтому её длина —
-  // ширина колонки плюс промежуток. У третьего шага она так же уходит
-  // за край сетки, как в оригинале.
   &__line {
     position: absolute;
     top: 18px;

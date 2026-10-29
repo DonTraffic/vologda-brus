@@ -1,13 +1,6 @@
 <script setup lang="ts">
 import { ADDRESS, PHONE_DISPLAY, PHONE_HREF, EMAIL, LEGAL, WORK_HOURS, COMPANY } from '~/data/site'
 
-/**
- * Полоса с реквизитами и картой производства.
- *
- * Карта тяжёлая, поэтому библиотека подгружается только когда блок
- * доезжает до экрана. Если скрипт не загрузился, на месте карты остаётся
- * тёмная подложка, а адрес и телефон рядом — текстом.
- */
 const host = ref<HTMLElement | null>(null)
 const canvas = ref<HTMLElement | null>(null)
 const failed = ref(false)
@@ -22,7 +15,7 @@ onMounted(() => {
         import('maplibre-gl/dist/maplibre-gl.css'),
       ])
       const { Map, Marker, setWorkerUrl } = maplibre
-      // Воркер лежит отдельным файлом — его кладёт scripts/copy-maplibre.mjs
+
       setWorkerUrl('/vendor/maplibre-gl-worker.mjs')
       if (!canvas.value) return
       const map = new Map({
@@ -39,7 +32,6 @@ onMounted(() => {
         .setLngLat([ADDRESS.lon!, ADDRESS.lat!])
         .addTo(map)
 
-      // Слева лежит колонка с реквизитами — отводим метку из-под неё
       map.on('load', () => {
         if (window.innerWidth >= 980) map.panBy([-300, 0], { duration: 0 })
       })
@@ -118,7 +110,6 @@ onMounted(() => {
     z-index: 0;
   }
 
-  // Затемнение, чтобы текст читался поверх карты
   &__veil {
     position: absolute;
     inset: 0;
@@ -205,7 +196,6 @@ onMounted(() => {
   }
 }
 
-// Метка производства: капля с белой точкой внутри
 :global(.cm__pin) {
   display: block;
   width: 28px;

@@ -8,14 +8,14 @@ onMounted(() => {
   try {
     isVisible.value = localStorage.getItem(STORAGE_KEY) !== '1'
   } catch {
-    // Приватный режим или заблокированное хранилище — баннер просто не покажем
+
     isVisible.value = false
   }
 })
 
 function accept() {
   isVisible.value = false
-  try { localStorage.setItem(STORAGE_KEY, '1') } catch { /* не критично */ }
+  try { localStorage.setItem(STORAGE_KEY, '1') } catch {}
 }
 </script>
 

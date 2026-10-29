@@ -31,8 +31,6 @@ const latest = computed(() => POSTS.slice(0, 3))
   background: $c-white;
   padding-block: clamp(30px, 3.5vw, 45px) clamp(40px, 6vw, 90px);
 
-  // Лента на главной стоит в той же сетке, что и на странице блога:
-  // колонка 940 px по центру, три карточки по 300 с шагом 20.
   &__inner { @include t-container; }
 
   &__title {
@@ -72,7 +70,6 @@ const latest = computed(() => POSTS.slice(0, 3))
     color: $c-brown-900;
     transition: color $transition;
 
-    // На широкой сетке Тильда поднимает кегль заголовка карточки
     @media (min-width: #{$t-bp-xl}) { font-size: 20px; line-height: 27px; }
   }
   &__desc { margin-top: 10px; font-size: 12px; line-height: 18.6px; color: rgba($c-black, 0.9); }

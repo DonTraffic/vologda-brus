@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { QUALITY } from '~/data/content'
-// В макете ряды чередуют сторону снимка: в 1, 3 и 5 он справа, во 2 и 4 — слева
+
 const flipped = (i: number) => Math.floor(i / 2) % 2 === 1
 </script>
 
@@ -47,7 +47,6 @@ const flipped = (i: number) => Math.floor(i / 2) % 2 === 1
     margin-bottom: clamp($space-md, 3vw, 35px);
   }
 
-  // В макете плитки стоят встык, без промежутков, двумя колонками по 580
   &__grid {
     display: grid;
     gap: 20px;
@@ -64,7 +63,6 @@ const flipped = (i: number) => Math.floor(i / 2) % 2 === 1
     grid-template-columns: 1fr 1fr;
     background: $c-white;
 
-    // Высота ряда из макета: половина плитки — квадратный снимок 290×290
     @media (min-width: #{$t-bp-lg}) { height: 290px; }
   }
 
@@ -72,8 +70,7 @@ const flipped = (i: number) => Math.floor(i / 2) % 2 === 1
     grid-column: 2;
     overflow: hidden;
     background: $c-sand;
-    // Пропорция снимка из макета: 235×260. Без неё картинка тянет
-    // ряд по своей натуральной высоте, и карточки распухают.
+
     aspect-ratio: 235 / 260;
 
     @media (min-width: #{$t-bp-lg}) { aspect-ratio: auto; height: 100%; }
@@ -93,7 +90,6 @@ const flipped = (i: number) => Math.floor(i / 2) % 2 === 1
 
     @media (min-width: #{$t-bp-lg}) { padding: 24px 30px; }
 
-    // Белый уголок, врезающийся в снимок, — деталь макета
     &::after {
       content: '';
       position: absolute;
@@ -111,7 +107,6 @@ const flipped = (i: number) => Math.floor(i / 2) % 2 === 1
     }
   }
 
-  // Перевёрнутый вариант: снимок слева
   &__card--flip {
     .ql__thumb { grid-column: 1; grid-row: 1; }
     .ql__body  { grid-column: 2; grid-row: 1; }

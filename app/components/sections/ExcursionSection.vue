@@ -6,7 +6,7 @@ const { open: openMessengers } = useMessengerModal()
 <template>
   <section id="excursion" class="exc">
     <div class="exc__inner" v-reveal>
-      <!-- Знак «//» над текстом — он есть в оригинале блока -->
+
       <div class="exc__icon" aria-hidden="true">
         <svg width="37" height="31" viewBox="0 0 37 31" fill="currentColor">
           <path d="M9.2342197,31 L0.520616382,31 L12.8070131,0.73046875 L21.5206164,0.73046875 L9.2342197,31 Z" />
@@ -19,9 +19,8 @@ const { open: openMessengers } = useMessengerModal()
     </div>
   </section>
 
-  <!-- Призыв во всю ширину: тонкие линии сверху и снизу — это тени кнопки -->
   <div class="excbtn">
-    <!-- Ссылка на форму записи, окно мессенджеров — надстройка поверх -->
+
     <a href="#consult" class="excbtn__btn" v-reveal="'right'" @click.prevent="openMessengers()">
       <span class="excbtn__text">{{ EXCURSION.cta }}</span>
       <span class="excbtn__icon" aria-hidden="true">
@@ -34,8 +33,7 @@ const { open: openMessengers } = useMessengerModal()
 </template>
 
 <style scoped lang="scss">
-// Снято с блока t267 действующего сайта: поля 45/45, знак «//» по центру,
-// текст слева, кегли 32 (первая строка) и 30, цвет — чёрный.
+
 .exc {
   background: $c-white;
   padding-block: 45px;
@@ -70,13 +68,11 @@ const { open: openMessengers } = useMessengerModal()
   padding-bottom: 75px;
   background: $c-white;
 
-  // Кнопка во всю ширину окна, как в оригинале. Линии над и под ней —
-  // не рамка, а две тени: -2px -2px и 2px 2px бежевым.
   &__btn {
     display: flex;
     align-items: center;
     justify-content: center;
-    // Ссылка вместо кнопки: выравнивание <button> задавал сам
+
     text-align: center;
     gap: 18px;
     width: 100%;

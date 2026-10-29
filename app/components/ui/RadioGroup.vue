@@ -1,5 +1,5 @@
 <script setup lang="ts">
-/** Группа переключателей в fieldset — так её правильно читает скринридер. */
+
 const props = defineProps<{
   legend: string
   name: string

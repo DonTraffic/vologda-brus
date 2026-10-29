@@ -1,16 +1,7 @@
-/**
- * Горизонтальная лента: перелистывание кнопками, перетаскивание мышью
- * и автопрокрутка.
- *
- * Пальцем лента и так листается — браузер сам прокручивает по касанию.
- * Мышью этого не происходит, поэтому тянем за указатель вручную, а чтобы
- * клик по карточке не срабатывал после перетаскивания, в конце жеста
- * гасим ближайшее событие click.
- */
 export interface CarouselOptions {
-  /** Пауза между шагами автопрокрутки, мс. 0 — автопрокрутки нет. */
+
   interval?: number
-  /** Промежуток между карточками, чтобы шаг совпадал с шириной карточки. */
+
   gap?: number
 }
 
@@ -32,7 +23,6 @@ export function useCarousel(options: CarouselOptions = {}) {
     el.value?.scrollBy({ left: dir * step(), behavior: 'smooth' })
   }
 
-  // --- перетаскивание мышью ---------------------------------------------
   let dragging = false
   let moved = false
   let startX = 0
@@ -55,10 +45,6 @@ export function useCarousel(options: CarouselOptions = {}) {
     const dx = e.clientX - startX
     if (!moved && Math.abs(dx) <= 4) return
 
-    // Захват указателя ставим только когда жест действительно начался.
-    // Если сделать это сразу на pointerdown, все последующие события —
-    // включая click — уходят ленте, и кнопки внутри карточек перестают
-    // нажиматься: простой клик до них просто не доходит.
     if (!moved) {
       moved = true
       node.setPointerCapture(e.pointerId)
@@ -75,17 +61,13 @@ export function useCarousel(options: CarouselOptions = {}) {
     node.style.cursor = ''
     node.style.scrollBehavior = ''
     if (moved) {
-      // Жест закончился перетаскиванием — клик по карточке не нужен
+
       const swallow = (ev: MouseEvent) => { ev.preventDefault(); ev.stopPropagation() }
       node.addEventListener('click', swallow, { capture: true, once: true })
       setTimeout(() => node.removeEventListener('click', swallow, { capture: true } as never), 0)
     }
   }
 
-  // --- колесо мыши -------------------------------------------------------
-  // Над лентой вертикальное колесо листает её вбок. Пока лента не упёрлась
-  // в край, прокрутку забираем себе; на краю отдаём странице, иначе
-  // страница «залипает» на блоке.
   function onWheel(e: WheelEvent) {
     const node = el.value
     if (!node) return
@@ -100,7 +82,6 @@ export function useCarousel(options: CarouselOptions = {}) {
     node.scrollLeft = Math.max(0, Math.min(max, node.scrollLeft + e.deltaY))
   }
 
-  // --- автопрокрутка -----------------------------------------------------
   function tick() {
     const node = el.value
     if (!node || paused || dragging) return

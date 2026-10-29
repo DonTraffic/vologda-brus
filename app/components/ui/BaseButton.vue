@@ -1,12 +1,5 @@
 <script setup lang="ts">
-/**
- * Кнопка или ссылка одним компонентом.
- *
- * Если передан to/href — получается настоящая ссылка, которую можно открыть
- * в новой вкладке и которую видит поисковик. Внешние ссылки автоматически
- * получают rel="noopener noreferrer": на текущем сайте ссылки на мессенджеры
- * открываются в новой вкладке без этой защиты.
- */
+
 const props = withDefaults(defineProps<{
   to?: string
   href?: string
@@ -23,9 +16,7 @@ const props = withDefaults(defineProps<{
 
 const target = computed(() => props.to || props.href || '')
 const isExternal = computed(() => /^(https?:)?\/\//.test(target.value) || /^(tel|mailto):/.test(target.value))
-// Ссылка вида "#consult" — это якорь на той же странице. Отдавать её в
-// NuxtLink нельзя: маршрутизатор разберёт её как путь и ссылка перестанет
-// указывать на блок. Такие адреса уходят в обычный <a>.
+
 const isHash = computed(() => target.value.startsWith('#'))
 const isInternalRoute = computed(() => !!target.value && !isExternal.value && !isHash.value)
 

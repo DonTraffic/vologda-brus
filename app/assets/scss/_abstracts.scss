@@ -1,5 +1,3 @@
-// Единая точка входа для токенов и миксинов.
-// Подключается автоматически в каждый <style lang="scss"> через nuxt.config.
 @forward 'tokens';
 @forward 'mixins';
 @forward 'hero-spec';

@@ -4,9 +4,6 @@ import { COMPANY, PHONE_HREF, EMAIL, ADDRESS, WORK_HOURS, LEGAL, SOCIAL } from '
 const config = useRuntimeConfig()
 const base = (config.public.siteUrl as string).replace(/\/$/, '')
 
-// Микроразметка организации. На текущем сайте её нет вовсе — только 63 пустых
-// блока ImageObject, поэтому сайт не претендует на блок с картой и адресом
-// по запросам вида «клееный брус Вологда».
 const organisation = computed(() => ({
   '@context': 'https://schema.org',
   '@type': 'LocalBusiness',
@@ -32,10 +29,7 @@ const organisation = computed(() => ({
   sameAs: SOCIAL.map(s => s.href),
   legalName: LEGAL.name,
   taxID: LEGAL.inn,
-  // ОГРНИП — государственный регистрационный номер, его место в identifier.
-  // В vatID он стоять не должен: это поле для номера плательщика НДС, а ИП
-  // на упрощёнке НДС не платит — поисковик получал бы заведомо неверные
-  // сведения о компании.
+
   ...(LEGAL.ogrnip ? { identifier: LEGAL.ogrnip } : {}),
 }))
 

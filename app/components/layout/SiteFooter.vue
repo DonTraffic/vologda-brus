@@ -33,13 +33,11 @@ function toTop() { window.scrollTo({ top: 0, behavior: 'smooth' }) }
         </div>
       </div>
 
-      <!-- Реквизитов в подвале оригинала нет; для сделки на миллионы они нужны -->
       <p class="ft__legal">
         {{ LEGAL.name }}<br>
         ИНН {{ LEGAL.inn }}<span v-if="LEGAL.ogrnip"> · ОГРНИП {{ LEGAL.ogrnip }}</span>
       </p>
 
-      <!-- FIX: в оригинале «публичной оффертой» с двумя «ф» -->
       <div class="ft__bottom">
         <p class="ft__copy">
           © {{ year }} Все права защищены | Не является публичной офертой.
@@ -88,9 +86,6 @@ function toTop() { window.scrollTo({ top: 0, behavior: 'smooth' }) }
 
   &__legal { margin-top: $space-md; font-size: 13px; line-height: 18px; color: rgba($c-mint-300, 0.8); }
 
-  // Контакты и навигация — в две колонки, низ подвала — в строку.
-  // Доли сетки вместо координат: длинный пункт меню или новая строка
-  // реквизитов просто раздвигают блок, а не наезжают на соседний.
   @include up(lg) {
     &__cols {
       display: grid;

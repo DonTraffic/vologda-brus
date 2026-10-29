@@ -58,7 +58,6 @@ const lines = (e: typeof EXPERTS[number]) => [e.experience, ...e.duties, `«${e.
     @include up(md) { grid-template-columns: 1fr 1fr; }
   }
 
-  // Фото и текст рядом — пропорции из макета: 260px на колонку снимка
   &__card {
     display: grid;
     gap: 17px;

@@ -6,7 +6,7 @@ body {
   font-size: $fs-body;
   font-weight: $fw-regular;
   line-height: $lh-base;
-  // Горизонтальной прокрутки на странице быть не должно ни при какой ширине
+
   overflow-x: hidden;
 }
 
@@ -25,8 +25,7 @@ h4 { font-size: $fs-h4; }
 p { text-wrap: pretty; }
 
 :root {
-  // Дублируем ключевые цвета в CSS-переменные: пригодится для точечных
-  // переопределений из разметки без пересборки стилей.
+
   --c-green-800: #{$c-green-800};
   --c-tan-500: #{$c-tan-500};
   --c-brown-900: #{$c-brown-900};
@@ -34,12 +33,10 @@ p { text-wrap: pretty; }
   --hdr-h: 56px;
 }
 
-// Служебные утилиты, которых не хватает в каждом втором компоненте
 .visually-hidden { @include visually-hidden; }
 
 .container { @include container; }
 
-// Ссылка «к содержанию» для клавиатурной навигации
 .skip-link {
   position: absolute;
   top: 0;
@@ -55,10 +52,6 @@ p { text-wrap: pretty; }
   &:focus { transform: translate(-50%, 0); }
 }
 
-
-// --- Появление при прокрутке ------------------------------------------------
-// Класс вешает директива v-reveal уже в браузере (app/plugins/reveal.client.ts).
-// Значения перенесены с анимаций действующего сайта.
 .reveal {
   opacity: 0;
   transition:
@@ -71,7 +64,6 @@ p { text-wrap: pretty; }
 .reveal--left  { transform: translateX(100px); }
 .reveal--zoom  { transform: scale(0.9); }
 
-// «Проявление» на сайте заметно медленнее переездов — секунда против половины
 .reveal--fade { transition-duration: 1s; }
 
 .reveal.is-revealed {

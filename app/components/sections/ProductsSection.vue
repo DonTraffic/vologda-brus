@@ -35,8 +35,7 @@ const { el: track, scrollByCards } = useCarousel({ interval: 5000, gap: 40 })
           <h3 class="pr__name">{{ p.title }}</h3>
           <p class="pr__text">{{ p.text }}</p>
           <NuxtLink v-if="p.href" :to="p.href" class="pr__cta">{{ p.cta }}</NuxtLink>
-          <!-- У карточек без своей страницы призыв ведёт к форме расчёта,
-               а окно выбора мессенджера перехватывает клик поверх неё -->
+
           <a v-else href="#calc" class="pr__cta" @click.prevent="openMessengers()">{{ p.cta }}</a>
         </div>
       </li>
@@ -45,8 +44,7 @@ const { el: track, scrollByCards } = useCarousel({ interval: 5000, gap: 40 })
 </template>
 
 <style scoped lang="scss">
-// Блок t1196: карточки 360×482 с рамкой 2 px, снимок 356×270, лента уходит
-// за правый край экрана, кнопки перелистывания — в строке подзаголовка.
+
 .pr {
   background: $c-white;
   padding-block: clamp(30px, 3.5vw, 45px) clamp(40px, 5vw, 75px);
@@ -81,8 +79,6 @@ const { el: track, scrollByCards } = useCarousel({ interval: 5000, gap: 40 })
     &:hover { color: $c-white; background: $c-brown-500; }
   }
 
-  // Лента во всю ширину окна: первая карточка начинается от края колонки,
-  // остальные уходят за правый край, как в оригинале
   &__track {
     display: flex;
     gap: 40px;
@@ -96,9 +92,6 @@ const { el: track, scrollByCards } = useCarousel({ interval: 5000, gap: 40 })
 
     &::-webkit-scrollbar { display: none; }
 
-    // Поле справа такое же, как слева: тогда в конце прокрутки последняя
-    // карточка встаёт ровно по правому краю колонки, а на широком экране
-    // лента не упирается после первых ста пикселей.
     @media (min-width: #{$t-bp-lg}) { padding-inline: calc((100vw - 960px) / 2 + 20px); }
     @media (min-width: #{$t-bp-xl}) { padding-inline: calc((100vw - 1200px) / 2 + 20px); }
   }
@@ -124,7 +117,7 @@ const { el: track, scrollByCards } = useCarousel({ interval: 5000, gap: 40 })
   &__text { margin-top: 4px; font-size: 16px; line-height: 23px; }
 
   &__cta {
-    // И NuxtLink, и обычная ссылка — рамку задаём сами, как было у <button>
+
     display: inline-block;
     text-align: center;
     align-self: flex-start;

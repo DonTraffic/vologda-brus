@@ -9,7 +9,6 @@ const form = reactive({ name: '', contact: '', way: WAYS[0] as string })
 const honeypot = ref('')
 const errors = reactive<Record<string, string>>({})
 
-/** Для телефона и для ника в мессенджере подсказки разные. */
 const isPhone = computed(() => form.way === 'Телефон')
 const placeholder = computed(() => (isPhone.value ? '+7 900 000-00-00' : '@username'))
 const fieldLabel = computed(() => (isPhone.value ? 'Номер телефона' : `Ник в ${form.way}`))
@@ -93,7 +92,6 @@ async function onSubmit() {
   background: $c-green-800;
   padding-block: clamp(48px, 7vw, 100px);
 
-  // Цвета таблеток на тёмном фоне
   --chip-fg: #{rgba($c-white, 0.88)};
   --chip-bg: #{rgba($c-white, 0.06)};
   --chip-bd: #{rgba($c-white, 0.3)};
@@ -126,7 +124,6 @@ async function onSubmit() {
     color: rgba($c-white, 0.78);
   }
 
-  // Карточка: форма отделена от фона, чтобы поля не «висели» в пустоте
   &__card {
     padding: clamp(20px, 3.5vw, 40px);
     background: rgba($c-green-900, 0.4);
@@ -145,7 +142,6 @@ async function onSubmit() {
     color: $c-white;
   }
 
-  // Таблетки тянутся на всю ширину поровну, пока помещаются
   &__chips {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -158,7 +154,6 @@ async function onSubmit() {
 
   &__chip { @include chip; }
 
-  // Поле и кнопка стоят в одну строку, на телефоне — друг под другом
   &__row {
     display: grid;
     gap: 12px;
@@ -230,7 +225,6 @@ async function onSubmit() {
     }
   }
 
-  // Состояние «отправлено» занимает место формы, поэтому блок не схлопывается
   &__done {
     display: grid;
     justify-items: center;

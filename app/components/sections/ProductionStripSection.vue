@@ -5,7 +5,6 @@ import imagesManifest from '~/data/images.json'
 const images = (imagesManifest as { default?: Record<string, { w: number; h: number }> }).default
   ?? (imagesManifest as Record<string, { w: number; h: number }>)
 
-/** Ширина кадра в ленте: высота фиксированная, ширина — по пропорциям снимка. */
 const widthOf = (name: string) => {
   const m = images[name]
   return m && m.h ? Math.round((m.w / m.h) * 500) : 667
@@ -48,8 +47,7 @@ const { el: strip, scrollByCards } = useCarousel({ interval: 5000, gap: 20 })
 </template>
 
 <style scoped lang="scss">
-// Блок t1148 действующего сайта: кадры высотой 500 с шагом 20, лента
-// начинается от левого края контейнера и уходит за правый край экрана.
+
 .ps {
   position: relative;
   padding-bottom: 30px;
@@ -67,7 +65,6 @@ const { el: strip, scrollByCards } = useCarousel({ interval: 5000, gap: 20 })
 
     &::-webkit-scrollbar { display: none; }
 
-    // Поле справа такое же, как слева — см. ленту продукции
     @media (min-width: #{$t-bp-lg}) { padding-inline: calc((100vw - 960px) / 2 + 20px); }
     @media (min-width: #{$t-bp-xl}) { padding-inline: calc((100vw - 1200px) / 2 + 20px); }
   }
@@ -85,7 +82,6 @@ const { el: strip, scrollByCards } = useCarousel({ interval: 5000, gap: 20 })
     :deep(img) { width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
   }
 
-  // Кнопки лежат поверх ленты по краям окна, как в оригинале
   &__controls {
     position: absolute;
     inset: 0 0 30px;

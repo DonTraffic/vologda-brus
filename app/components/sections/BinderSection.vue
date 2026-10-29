@@ -6,8 +6,7 @@ const { open: openMessengers } = useMessengerModal()
 <template>
   <section class="bn">
     <div class="bn__inner">
-      <!-- Фото и панель лежат в одной ячейке сетки: тёмная карточка
-           намеренно заходит на снимок слева. Это приём макета. -->
+
       <div class="bn__photo" v-reveal="'left'">
         <SmartImage
           :name="BINDER.image"
@@ -24,8 +23,7 @@ const { open: openMessengers } = useMessengerModal()
         <ul class="bn__list">
           <li v-for="f in BINDER.features" :key="f">{{ f }}.</li>
         </ul>
-        <!-- Ссылка на форму расчёта, окно мессенджеров — надстройка поверх.
-             См. первый экран: без скриптов призыв всё равно ведёт к заявке. -->
+
         <a href="#calc" class="bn__cta" @click.prevent="openMessengers()">{{ BINDER.cta }}</a>
       </div>
     </div>
@@ -66,7 +64,7 @@ const { open: openMessengers } = useMessengerModal()
   &__list { margin: 0; padding-left: 20px; font-size: 18px; line-height: 27.9px; }
 
   &__cta {
-    // Ссылка, а не кнопка: эти две строки держат ту же рамку, что у <button>
+
     display: inline-block;
     text-align: center;
     margin-top: clamp($space-lg, 5vw, 85px);
@@ -80,12 +78,8 @@ const { open: openMessengers } = useMessengerModal()
     &:hover { background: $c-mint-100; }
   }
 
-  // Раскладка блока t814: снимок лежит слева от самого края колонки,
-  // зелёная панель накрывает его почти целиком и заканчивается ниже —
-  // из-под неё видна только правая полоса фотографии.
   @media (min-width: #{$t-bp-lg}) {
-    // padding-top вместо margin у панели: иначе отступ схлопывается
-    // наружу и снимок встаёт вровень с панелью вместо сдвига вверх
+
     &__inner { position: relative; display: block; padding-top: 37px; }
 
     &__photo {

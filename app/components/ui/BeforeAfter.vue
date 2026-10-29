@@ -1,11 +1,5 @@
 <script setup lang="ts">
-/**
- * Сравнение «до / после» перетаскиванием.
- *
- * Управляется и мышью, и с клавиатуры — ползунок это настоящий input[range],
- * поэтому работает без отдельной обработки касаний и доступен скринридеру.
- * Без JavaScript видна картинка «после» целиком, то есть блок не ломается.
- */
+
 const props = withDefaults(defineProps<{
   before: { src: string; alt: string }
   after: { src: string; alt: string }
@@ -122,7 +116,6 @@ const clip = computed(() => `inset(0 0 0 ${position.value}%)`)
     &--after { right: 10px; }
   }
 
-  // Прозрачный ползунок на всю площадь: тянется в любом месте картинки
   &__range {
     position: absolute;
     inset: 0;

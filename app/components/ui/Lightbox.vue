@@ -1,20 +1,11 @@
 <script setup lang="ts">
-/**
- * Просмотр фотографии во весь экран.
- *
- * Открывается кликом по снимку в галерее проектов. Листается стрелками,
- * колёсиком мыши не управляется — только клавиатурой и кнопками, чтобы
- * случайная прокрутка не меняла кадр.
- *
- * Пока окно закрыто, в разметке его нет вовсе: на сервере и в выдаче
- * поисковику лишнего кода не появляется.
- */
+
 const props = defineProps<{
-  /** Имена картинок из манифеста. */
+
   images: readonly string[]
-  /** Что показывать. -1 — окно закрыто. */
+
   index: number
-  /** Подпись: к ней добавляется номер кадра. */
+
   caption: string
 }>()
 
@@ -23,7 +14,6 @@ const emit = defineEmits<{ close: []; 'update:index': [value: number] }>()
 const isOpen = computed(() => props.index >= 0 && props.index < props.images.length)
 const dialog = ref<HTMLElement | null>(null)
 
-/** Элемент, с которого открыли окно: туда возвращаем фокус при закрытии. */
 let opener: HTMLElement | null = null
 
 function step(delta: number) {
@@ -44,8 +34,7 @@ watch(isOpen, (open, was) => {
 
   if (open) {
     opener = document.activeElement as HTMLElement | null
-    // Полоса прокрутки исчезает вместе с прокруткой — компенсируем её
-    // ширину, иначе страница под окном дёргается вбок.
+
     const gap = window.innerWidth - document.documentElement.clientWidth
     document.body.style.overflow = 'hidden'
     if (gap > 0) document.body.style.paddingRight = `${gap}px`
@@ -148,7 +137,7 @@ onBeforeUnmount(() => {
       width: auto;
       height: auto;
       max-width: 100%;
-      // Оставляем место счётчику и кнопке закрытия
+
       max-height: calc(100dvh - clamp(80px, 14vw, 150px));
       object-fit: contain;
     }

@@ -1,27 +1,14 @@
 <script setup lang="ts">
 import { PROJECTS } from '~/data/content'
 
-/**
- * Проекты: вкладки, крупный кадр и миниатюры под ним.
- *
- * Раскладка как в оригинале: слева большая фотография, справа описание,
- * под фотографией лента миниатюр. Миниатюра переключает крупный кадр,
- * клик по крупному кадру открывает снимок во весь экран.
- *
- * Фиксированных координат здесь нет: ширины заданы долями сетки, высота
- * растёт по содержимому. Поэтому длинный текст проекта не наезжает на
- * соседние блоки, а на узком экране колонки просто встают друг под друга.
- */
 const activeId = ref(PROJECTS.items[0]!.id)
 const tabRefs = ref<HTMLButtonElement[]>([])
 const active = computed(() => PROJECTS.items.find(p => p.id === activeId.value)!)
 const activeIndex = computed(() => PROJECTS.items.findIndex(p => p.id === activeId.value))
 
-/** Какой снимок показан крупно. Сбрасывается при смене проекта. */
 const shot = ref(0)
 watch(activeId, () => { shot.value = 0 })
 
-/** Номер снимка в полноэкранном окне, -1 — окно закрыто. */
 const zoom = ref(-1)
 
 function goTab(delta: number) {
@@ -115,11 +102,7 @@ function onTabKey(e: KeyboardEvent, index: number) {
                 :aria-current="i === shot ? 'true' : undefined"
                 @click="shot = i"
               >
-                <!-- Подпись нужна поиску по картинкам: миниатюра — это
-                     единственное место, где кадры 2…6 попадают в разметку
-                     (крупно показан только выбранный). Программе чтения с
-                     экрана подпись не мешает: имя кнопке даёт aria-label,
-                     он перекрывает содержимое. -->
+
                 <SmartImage :name="g" :alt="`${active.title} — фото ${i + 1}`" cover sizes="110px" />
               </button>
             </li>
@@ -159,7 +142,6 @@ function onTabKey(e: KeyboardEvent, index: number) {
     text-align: center;
   }
 
-  // Полоса вкладок: стрелки по краям, вкладки по центру, линия снизу
   &__bar {
     display: flex;
     align-items: stretch;
@@ -206,7 +188,6 @@ function onTabKey(e: KeyboardEvent, index: number) {
     &--active { color: $c-green-800; border-color: $c-tan-500; }
   }
 
-  // Две колонки на широком экране, одна на узком
   &__panel {
     display: grid;
     gap: clamp(20px, 3vw, 40px);

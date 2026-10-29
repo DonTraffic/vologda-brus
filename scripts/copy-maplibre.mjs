@@ -1,6 +1,3 @@
-// MapLibre грузит разбор тайлов отдельным воркером. Сборщик этот файл
-// не подхватывает, поэтому кладём его рядом со статикой и указываем адрес
-// явно (см. app/components/layout/ContactsMap.vue).
 import { mkdir, copyFile } from 'node:fs/promises'
 import { fileURLToPath } from 'node:url'
 

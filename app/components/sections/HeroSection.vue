@@ -5,8 +5,7 @@ const { open: openMessengers } = useMessengerModal()
 
 <template>
   <section class="hero">
-    <!-- Фотография отдаётся картинкой, а не фоном в CSS: так она попадает
-         в srcset и грузится в нужном размере. Затемнения нет — кадр тёмный сам. -->
+
     <div class="hero__bg">
       <SmartImage name="hero-01" alt="" priority cover sizes="100vw" />
     </div>
@@ -34,8 +33,6 @@ const { open: openMessengers } = useMessengerModal()
         />
       </div>
 
-      <!-- Рамки и подписи разведены: широкая рамка намеренно уходит
-           за левый край экрана, а текст остаётся в поле зрения. -->
       <div class="hero__box hero__box--feature" aria-hidden="true" />
       <div v-for="(s, i) in HERO_STATS.items" :key="`b${i}`"
            class="hero__box" :class="`hero__box--${i + 1}`" aria-hidden="true" />
@@ -68,8 +65,7 @@ const { open: openMessengers } = useMessengerModal()
   isolation: isolate;
   color: $c-white;
   background: $c-green-900;
-  // Как в макете: экран целиком, но не ниже 700px
-  // Артборд 700px, увеличенный тем же коэффициентом; не ниже окна
+
   --k: tan(atan2(100vw, #{$stage-w}));
   min-height: calc(#{$stage-h} * var(--k, 1));
   height: 100vh;
@@ -83,7 +79,6 @@ const { open: openMessengers } = useMessengerModal()
     :deep(img) { width: 100%; height: 100%; object-fit: cover; object-position: center; }
   }
 
-  // --- Телефон и планшет: обычный поток, без абсолюта ---
   &__stage {
     display: flex;
     flex-direction: column;
@@ -113,9 +108,6 @@ const { open: openMessengers } = useMessengerModal()
     color: $c-white;
   }
 
-  // Рамка у кнопок первого экрана — не border, а две тени со сдвигом
-  // в разные стороны: сверху-слева одна, снизу-справа другая. Отсюда
-  // двойной контур, который видно в макете.
   &__btn {
     display: inline-flex;
     align-items: center;
@@ -152,7 +144,6 @@ const { open: openMessengers } = useMessengerModal()
     margin-top: $space-xs;
   }
 
-  // На телефоне рамки не нужны — подписи идут обычным рядом
   &__box { display: none; }
 
   &__label {
@@ -171,16 +162,6 @@ const { open: openMessengers } = useMessengerModal()
 
   &__scroll { display: none; }
 
-  // --- Десктоп: блок 1200×700 с координатами из макета, целиком
-  // масштабируемый под ширину окна.
-  //
-  // Тильда делает ровно это: вешает на элементы CSS-свойство zoom с
-  // коэффициентом «ширина окна / ширина макета». Поэтому у неё вместе с
-  // раскладкой растёт и шрифт — заголовок в 75px на экране 1600px
-  // рисуется как 100px. Без этого вёрстка «мельчает» и уезжает вправо.
-  //
-  // Коэффициент считается чистым CSS: деление длины на длину даёт
-  // безразмерное число через tan(atan2(a, b)).
   @include up(lg) {
     &__stage {
       --k: tan(atan2(100vw, #{$stage-w}));
@@ -196,8 +177,6 @@ const { open: openMessengers } = useMessengerModal()
       transform-origin: center center;
     }
 
-    // Дальше — сырые координаты из макета: отсчёт от левого верхнего угла
-    // блока 1200×700, без пересчётов на сетку.
     &__title {
       @include place($hero-title);
       font-size: $hero-title-fs;
@@ -232,7 +211,7 @@ const { open: openMessengers } = useMessengerModal()
       border: 0;
       font-size: 16px;
       line-height: 1.15;
-      // Подписи стоят по центру своих плашек, как в макете
+
       align-items: center;
       text-align: center;
     }
@@ -252,8 +231,7 @@ const { open: openMessengers } = useMessengerModal()
       place-items: center;
       width: map.get($hero-chevron, w);
       color: rgba($c-white, 0.85);
-      // Стрелка покачивается, как на действующем сайте: 14 px вниз
-      // и обратно за секунду, с подсветкой на 0,75 прозрачности
+
       animation: hero-chevron 1s ease-in-out infinite alternate;
       @include focus-ring($c-mint-300);
 

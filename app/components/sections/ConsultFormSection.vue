@@ -12,15 +12,13 @@ const form = reactive({
 const honeypot = ref('')
 const errors = reactive<Record<string, string>>({})
 
-// Куда писать ответ. Подпись и подсказка зависят от выбранного способа
-// связи — как в форме расчёта: для телефона нужен номер, для мессенджера ник.
 const isPhone = computed(() => form.way === 'Телефон')
 const contactLabel = computed(() => (isPhone.value ? 'Номер телефона' : `Ник в ${form.way}`))
 const contactHint = computed(() => (isPhone.value ? '+7 900 000-00-00' : '@username'))
 
 function validate() {
   errors.name = form.name.trim().length < 2 ? 'Укажите имя' : ''
-  // Без контакта заявка бесполезна: способ связи выбран, а связаться нечем.
+
   errors.contact = form.contact.trim().length < 5
     ? (isPhone.value ? 'Укажите номер телефона' : 'Укажите ник')
     : ''
@@ -126,7 +124,6 @@ async function onSubmit() {
   background: $c-cream;
   padding-block: clamp(48px, 7vw, 100px);
 
-  // Цвета таблеток на светлом фоне
   --chip-fg: #{$c-brown-900};
   --chip-bg: #{$c-white};
   --chip-bd: #{rgba($c-brown-900, 0.2)};
@@ -157,8 +154,6 @@ async function onSubmit() {
     color: $c-text-muted;
   }
 
-  // Белая карточка на кремовом фоне: форма читается как один предмет,
-  // а поля не растекаются по всей ширине экрана
   &__card {
     padding: clamp(20px, 3.5vw, 40px);
     background: $c-white;
@@ -210,7 +205,6 @@ async function onSubmit() {
 
   &__in--area { min-height: 128px; resize: vertical; }
 
-  // Два способа связи делим пополам, три эксперта — на три равные доли
   &__chips { display: grid; gap: 10px; }
 
   &__chips--way {
@@ -235,7 +229,6 @@ async function onSubmit() {
     color: #b4342a;
   }
 
-  // Кнопка и примечание рядом: на узком экране кнопка во всю ширину сверху
   &__foot {
     display: grid;
     gap: 14px;

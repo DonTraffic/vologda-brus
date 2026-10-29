@@ -1,7 +1,5 @@
 <script setup lang="ts">
-// Там, где страница начинается с фотографии на всю ширину, шапка лежит
-// поверх неё — как в оригинале. Остальным страницам нужен отступ сверху
-// на высоту шапки.
+
 const COVER_PAGES = ['/', '/blog']
 const route = useRoute()
 const isHome = computed(() => COVER_PAGES.includes(route.path))
@@ -31,8 +29,7 @@ const isHome = computed(() => COVER_PAGES.includes(route.path))
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  // Блоки приезжают из-за края экрана, и на время анимации они вылезают
-  // за пределы страницы. clip отрезает их, не делая сам слой прокручиваемым.
+
   overflow-x: clip;
 
   &__main { flex: 1; }

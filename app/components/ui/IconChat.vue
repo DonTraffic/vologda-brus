@@ -1,6 +1,5 @@
 <script setup lang="ts">
-// Простые геометрические значки: «переписка», «телефон», «почта», «стрелка».
-// Своя отрисовка, без логотипов сторонних сервисов — подпись рядом текстом.
+
 withDefaults(defineProps<{ name: 'chat' | 'phone' | 'mail' | 'pin' | 'arrow-up' | 'burger' | 'close'; size?: number }>(), {
   size: 20,
 })

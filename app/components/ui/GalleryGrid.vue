@@ -1,13 +1,8 @@
 <script setup lang="ts">
-/**
- * Сетка фотографий с увеличением по клику.
- *
- * Плитки — настоящие <button>, поэтому доступны с клавиатуры. Без JavaScript
- * остаётся обычная сетка картинок: содержимое не пропадает.
- */
+
 const props = withDefaults(defineProps<{
   items: string[]
-  /** Подпись-основа для alt: к ней добавляется номер кадра. */
+
   altBase: string
   minTile?: string
 }>(), {
@@ -33,7 +28,6 @@ function onKey(e: KeyboardEvent) {
   else if (e.key === 'ArrowLeft') step(-1)
 }
 
-// Пока открыт просмотр — страница под ним не прокручивается
 watch(isOpen, (open) => {
   if (import.meta.client) document.body.style.overflow = open ? 'hidden' : ''
 })

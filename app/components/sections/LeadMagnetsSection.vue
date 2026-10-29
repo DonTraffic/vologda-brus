@@ -2,8 +2,6 @@
 import { LEAD_MAGNETS } from '~/data/content'
 const { open: openMessengers } = useMessengerModal()
 
-// Раскладка макета — мозаика, а не три одинаковые карточки:
-// «дом» занимает крупную плитку слева, «баня» и «чек-лист» идут справа.
 const SLOT = ['check', 'bath', 'house'] as const
 </script>
 
@@ -19,9 +17,7 @@ const SLOT = ['check', 'bath', 'house'] as const
         <SmartImage :name="item.image" :alt="item.title" cover sizes="(min-width: 1024px) 560px, 100vw" />
       </div>
       <h3 class="lm__name">{{ item.title }}</h3>
-      <!-- Настоящая ссылка на форму консультации, а окно выбора мессенджера —
-           надстройка поверх: при отключённых скриптах человек попадает к форме,
-           а не остаётся с мёртвой кнопкой. Образец — первый экран. -->
+
       <a href="#consult" class="lm__get" @click.prevent="openMessengers()">{{ LEAD_MAGNETS.cta }}</a>
     </div>
   </ZeroStage>
@@ -45,10 +41,8 @@ const SLOT = ['check', 'bath', 'house'] as const
 
   &__name { font-size: 24px; font-weight: $fw-regular; line-height: 32.4px; margin-bottom: $space-xs; }
 
-  // Не кнопка, а текстовая ссылка с подчёркиванием — как в макете
   &__get {
-    // Ссылка, а не кнопка: эти две строки возвращают ровно ту рамку и то
-    // выравнивание, которые <button> давал сам, без правил в оформлении
+
     display: inline-block;
     text-align: center;
     font-size: 16px;
@@ -70,13 +64,12 @@ const SLOT = ['check', 'bath', 'house'] as const
     &__name  { position: absolute; margin: 0; }
     &__get   { position: absolute; }
 
-    // Крупная плитка слева
     &__item--house {
       .lm__thumb { left: 20px;  top: 169px; width: 560px; height: 373px; }
       .lm__name  { left: 20px;  top: 567px; width: 560px; }
       .lm__get   { left: 20px;  top: 639px; }
     }
-    // Правый столбец: картинка и подпись разведены по горизонтали
+
     &__item--bath {
       .lm__thumb { left: 620px; top: 169px; width: 268px; height: 229px; }
       .lm__name  { left: 913px; top: 169px; width: 268px; }

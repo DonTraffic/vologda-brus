@@ -5,7 +5,6 @@ import { COMPANY } from '~/data/site'
 const route = useRoute()
 const post = computed(() => findPost(String(route.params.slug)))
 
-// Неизвестный адрес отдаёт настоящий 404, а не пустую страницу
 if (!post.value) {
   throw createError({ statusCode: 404, statusMessage: 'Статья не найдена', fatal: true })
 }
@@ -14,8 +13,7 @@ const p = post.value!
 
 useSeo({
   title: p.title,
-  // Описания у четырёх статей из пяти не заполнены — подставляем начало текста,
-  // чтобы в выдаче не было пусто.
+
   description: p.description || p.parts.find(x => x.type === 'p')?.text.slice(0, 180) || COMPANY.tagline,
   image: p.cover ?? 'hero-01',
   type: 'article',
@@ -42,13 +40,10 @@ useHead({
   ],
 })
 
-/** Дата под статьёй набрана как на текущем сайте: 31.05.2026. */
 const dateFmt = new Intl.DateTimeFormat('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' })
 
-// Под статьёй — все остальные записи, как в блоке «Смотрите также» оригинала.
 const others = computed(() => POSTS.filter(x => x.slug !== p.slug))
 
-/** Одиночный перенос строки внутри абзаца сохранён в тексте как \n. */
 const lines = (text: string) => text.split('\n')
 </script>
 
@@ -103,9 +98,7 @@ const lines = (text: string) => text.split('\n')
 </template>
 
 <style scoped lang="scss">
-// Кегли и отбивки сняты со страницы статьи на Тильде: текст 18/25,2,
-// заголовки редактора 28 и 26 px. Колонку, в отличие от оригинала,
-// не держим на 620 px — страница идёт в общей сетке сайта.
+
 .post {
   padding-block: clamp(32px, 6vw, 95px) clamp(40px, 6vw, 100px);
 
@@ -129,8 +122,6 @@ const lines = (text: string) => text.split('\n')
     color: $c-brown-900;
   }
 
-  // Обложки сняты с Тильды вертикальными (1024×1280). На всю ширину
-  // колонки такая фотография занимала бы два экрана, поэтому кадрируем.
   &__cover {
     margin: 15px 0 30px;
 
@@ -147,13 +138,10 @@ const lines = (text: string) => text.split('\n')
 
   &__body { color: $c-black; }
 
-  // Заголовки внутри статьи набраны тем же чёрным, что и текст, — как в оригинале
   &__para, &__hb, &__h2, &__h3 { margin: 0 0 12px; color: inherit; }
 
   &__para { font-size: 18px; line-height: 25.2px; }
 
-  // Подзаголовок, набранный в оригинале жирным внутри сплошного текста:
-  // кегль абзаца, поэтому в разметке это h2, а по виду — та же строка.
   &__hb { font-size: 18px; line-height: 25.2px; font-weight: $fw-bold; }
 
   &__h2 { font-size: clamp(1.375rem, 1.1rem + 1vw, 28px); line-height: 1.3; font-weight: $fw-bold; }
