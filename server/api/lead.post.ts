@@ -16,11 +16,14 @@ export default defineEventHandler(async (event) => {
 
   const origin = getRequestHeader(event, 'origin')
   if (origin) {
-    const allowed = new URL(String(config.public.siteUrl)).host
-    let host = ''
-    try { host = new URL(origin).host }
-    catch { host = '' }
-    if (host !== allowed && !host.startsWith('localhost') && !host.startsWith('127.0.0.1')) {
+    let from = ''
+    try { from = new URL(origin).host }
+    catch { from = '' }
+
+    const siteHost = new URL(String(config.public.siteUrl)).host
+    const selfHost = getRequestHost(event, { xForwardedHost: true })
+
+    if (from !== siteHost && from !== selfHost) {
       throw createError({ statusCode: 403, statusMessage: 'Forbidden' })
     }
   }
