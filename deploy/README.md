@@ -17,7 +17,8 @@ App Platform в Timeweb Cloud. Своего конфига веб-сервера
 
 ```bash
 npm ci
-npm run generate       # результат в .output/public
+npm run build          # результат в .output
+npm start              # запуск серверного приложения
 ```
 
 ---

@@ -6,21 +6,24 @@
     "dev": "node scripts/copy-maplibre.mjs && nuxt dev",
     "prebuild": "node scripts/copy-maplibre.mjs",
     "build": "nuxt build",
-    "postbuild": "node scripts/fix-404.mjs && node scripts/sitemap.mjs",
+    "postbuild": "node scripts/fix-404.mjs",
+    "start": "node .output/server/index.mjs",
     "pregenerate": "node scripts/copy-maplibre.mjs",
     "generate": "nuxt generate",
-    "postgenerate": "node scripts/fix-404.mjs && node scripts/sitemap.mjs",
+    "postgenerate": "node scripts/fix-404.mjs",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare && node scripts/copy-maplibre.mjs",
     "copy:maplibre": "node scripts/copy-maplibre.mjs"
   },
   "dependencies": {
     "maplibre-gl": "^6.14.0",
+    "nodemailer": "^10.2.1",
     "nuxt": "^4.5.2",
     "vue": "^3.5.42",
     "vue-router": "^5.3.1"
   },
   "devDependencies": {
+    "@types/nodemailer": "^8.0.2",
     "puppeteer-core": "^25.12.0",
     "sass-embedded": "^1.93.2"
   }
