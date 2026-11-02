@@ -106,12 +106,13 @@ const headerMessengers = computed(() => MESSENGERS.filter(m => m.id !== 'whatsap
 
   &__slogan {
     display: none;
+    max-width: 230px;
     font-size: 10px;
     font-weight: $fw-regular;
     line-height: 14px;
     color: $c-tan-500;
 
-    @include up(md) { display: block; }
+    @include up(lg) { display: block; }
   }
 
   &__right { display: flex; align-items: center; gap: 14px; }

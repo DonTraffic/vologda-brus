@@ -60,20 +60,28 @@ const flipped = (i: number) => Math.floor(i / 2) % 2 === 1
   &__card {
     position: relative;
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: minmax(0, 1fr);
     background: $c-white;
 
-    @media (min-width: #{$t-bp-lg}) { height: 290px; }
+    @media (min-width: #{$t-bp-lg}) {
+      grid-template-columns: 1fr 1fr;
+      height: 290px;
+    }
   }
 
   &__thumb {
-    grid-column: 2;
+    grid-column: 1;
+    grid-row: 1;
     overflow: hidden;
     background: $c-sand;
 
-    aspect-ratio: 235 / 260;
+    aspect-ratio: 16 / 9;
 
-    @media (min-width: #{$t-bp-lg}) { aspect-ratio: auto; height: 100%; }
+    @media (min-width: #{$t-bp-lg}) {
+      grid-column: 2;
+      aspect-ratio: auto;
+      height: 100%;
+    }
 
     :deep(picture) { display: block; width: 100%; height: 100%; }
     :deep(img) { width: 100%; height: 100%; object-fit: cover; }
@@ -85,10 +93,13 @@ const flipped = (i: number) => Math.floor(i / 2) % 2 === 1
     flex-direction: column;
     justify-content: center;
     grid-column: 1;
-    grid-row: 1;
+    grid-row: 2;
     padding: 20px 24px 24px;
 
-    @media (min-width: #{$t-bp-lg}) { padding: 24px 30px; }
+    @media (min-width: #{$t-bp-lg}) {
+      grid-row: 1;
+      padding: 24px 30px;
+    }
 
     &::after {
       content: '';
@@ -108,8 +119,10 @@ const flipped = (i: number) => Math.floor(i / 2) % 2 === 1
   }
 
   &__card--flip {
-    .ql__thumb { grid-column: 1; grid-row: 1; }
-    .ql__body  { grid-column: 2; grid-row: 1; }
+    @media (min-width: #{$t-bp-lg}) {
+      .ql__thumb { grid-column: 1; grid-row: 1; }
+      .ql__body  { grid-column: 2; grid-row: 1; }
+    }
 
     .ql__body::after {
       right: auto;

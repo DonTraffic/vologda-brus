@@ -179,7 +179,9 @@ async function onSubmit() {
   &__field--set { border: 0; padding: 0; margin: 0; }
 
   &__lbl {
+    display: block;
     padding: 0;
+    margin-bottom: 10px;
     font-size: 15px;
     font-weight: $fw-medium;
     line-height: 1.35;

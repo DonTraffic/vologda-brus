@@ -11,23 +11,25 @@ const lines = (e: typeof EXPERTS[number]) => [e.experience, ...e.duties, `«${e.
 
       <ul class="ex__grid" role="list">
         <li
-          v-for="(e, i) in EXPERTS" :key="e.name" class="ex__card"
+          v-for="(e, i) in EXPERTS" :key="e.name" class="ex__item"
           v-reveal="{ style: 'right', delay: i * 0.16 }"
         >
-          <div class="ex__photo">
+          <div class="ex__card">
+            <div class="ex__photo">
             <SmartImage
               :name="e.photo"
               :alt="`${e.name} — ${e.role.toLowerCase()}, ${COMPANY.name}`"
               cover
               sizes="(min-width: 1024px) 260px, 45vw"
             />
-          </div>
-          <div class="ex__body">
-            <h3 class="ex__name">{{ e.name }}</h3>
-            <p class="ex__role">{{ e.role }}</p>
-            <ul class="ex__list">
-              <li v-for="l in lines(e)" :key="l">{{ l }}</li>
-            </ul>
+            </div>
+            <div class="ex__body">
+              <h3 class="ex__name">{{ e.name }}</h3>
+              <p class="ex__role">{{ e.role }}</p>
+              <ul class="ex__list">
+                <li v-for="l in lines(e)" :key="l">{{ l }}</li>
+              </ul>
+            </div>
           </div>
         </li>
       </ul>
@@ -54,20 +56,24 @@ const lines = (e: typeof EXPERTS[number]) => [e.experience, ...e.duties, `«${e.
     display: grid;
     gap: clamp($space-lg, 3vw, 20px);
     margin: 0; padding: 0; list-style: none;
-
-    @include up(md) { grid-template-columns: 1fr 1fr; }
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   }
+
+  &__item { container-type: inline-size; }
 
   &__card {
     display: grid;
     gap: 17px;
     grid-template-columns: minmax(0, 1fr);
 
-    @include up(xs) { grid-template-columns: minmax(120px, 260px) minmax(0, 1fr); }
+    @container (min-width: 420px) {
+      grid-template-columns: minmax(0, 0.8fr) minmax(0, 1fr);
+    }
   }
 
   &__photo {
     overflow: hidden;
+    max-width: 260px;
     aspect-ratio: 260 / 346;
     background: $c-sand;
 
