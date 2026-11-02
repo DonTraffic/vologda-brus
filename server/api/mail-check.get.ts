@@ -26,7 +26,12 @@ export default defineEventHandler(async (event) => {
   const pass = String(config.smtpPass ?? '')
   const to = String(config.mailTo ?? '').trim()
 
-  const ports = host ? await Promise.all([465, 587, 25].map(p => probe(host, p))) : []
+  const ports = host ? await Promise.all([465, 587, 25, 443].map(p => probe(host, p))) : []
+
+  const web = await Promise.all([
+    probe('go1.unisender.ru', 443),
+    probe('api.unisender.com', 443),
+  ])
 
   return {
     настройки: {
@@ -37,9 +42,18 @@ export default defineEventHandler(async (event) => {
       получатель: to || 'не задан, заявки пойдут на сам ящик',
       приёмЗаявок: host && user && pass ? 'включён' : 'ВЫКЛЮЧЕН',
     },
-    связь: host
-      ? { [`${host}:465`]: ports[0], [`${host}:587`]: ports[1], [`${host}:25`]: ports[2] }
+    почтовыеПорты: host
+      ? {
+          [`${host}:465`]: ports[0],
+          [`${host}:587`]: ports[1],
+          [`${host}:25`]: ports[2],
+        }
       : 'сервер не задан, проверять нечего',
+    обычныйИнтернет: {
+      [`${host || 'сервер'}:443`]: host ? ports[3] : 'сервер не задан',
+      'go1.unisender.ru:443': web[0],
+      'api.unisender.com:443': web[1],
+    },
     используетсяПорт: port,
   }
 })
