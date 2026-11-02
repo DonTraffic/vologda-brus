@@ -3,7 +3,7 @@ import { CONSULT_FORM } from '~/data/content'
 import { MESSENGERS } from '~/data/site'
 
 const { state, errorText, submit } = useLeadForm()
-const WAYS = MESSENGERS.filter(m => m.id !== 'telegram').map(m => m.label)
+const WAYS = MESSENGERS.map(m => m.label)
 
 const form = reactive({
   name: '', contact: '', way: WAYS[0] as string,
@@ -23,8 +23,7 @@ watch(() => form.way, () => {
 
 watch(() => form.contact, (value) => {
   errors.contact = ''
-  if (!isPhone.value) return
-  const masked = formatPhone(value)
+  const masked = formatContact(value, form.way)
   if (masked !== value) form.contact = masked
 })
 

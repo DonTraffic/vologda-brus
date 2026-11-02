@@ -20,8 +20,7 @@ watch(() => form.way, () => {
 
 watch(() => form.contact, (value) => {
   errors.contact = ''
-  if (!isPhone.value) return
-  const masked = formatPhone(value)
+  const masked = formatContact(value, form.way)
   if (masked !== value) form.contact = masked
 })
 
