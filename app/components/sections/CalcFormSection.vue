@@ -9,14 +9,24 @@ const form = reactive({ name: '', contact: '', way: WAYS[0] as string })
 const honeypot = ref('')
 const errors = reactive<Record<string, string>>({})
 
-const isPhone = computed(() => form.way === 'Телефон')
+const isPhone = computed(() => wantsPhone(form.way))
 const placeholder = computed(() => (isPhone.value ? '+7 900 000-00-00' : '@username'))
 const fieldLabel = computed(() => (isPhone.value ? 'Номер телефона' : `Ник в ${form.way}`))
 
+watch(() => form.way, () => {
+  form.contact = ''
+  errors.contact = ''
+})
+
+watch(() => form.contact, (value) => {
+  errors.contact = ''
+  if (!isPhone.value) return
+  const masked = formatPhone(value)
+  if (masked !== value) form.contact = masked
+})
+
 function validate() {
-  errors.contact = form.contact.trim().length < 5
-    ? (isPhone.value ? 'Укажите номер телефона' : 'Укажите ник')
-    : ''
+  errors.contact = contactError(form.contact, form.way)
   return !errors.contact
 }
 async function onSubmit() {
@@ -61,7 +71,8 @@ async function onSubmit() {
           <div class="cf__row">
             <input
               v-model="form.contact" class="cf__input" :type="isPhone ? 'tel' : 'text'" name="contact"
-              :autocomplete="isPhone ? 'tel' : 'off'" :placeholder="placeholder" :aria-label="fieldLabel"
+              :autocomplete="isPhone ? 'tel' : 'off'" :inputmode="isPhone ? 'tel' : 'text'"
+              :maxlength="isPhone ? 16 : 33" :placeholder="placeholder" :aria-label="fieldLabel"
               :aria-invalid="!!errors.contact || undefined"
             >
             <button type="submit" class="cf__submit" :disabled="state === 'sending'">

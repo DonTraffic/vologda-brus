@@ -12,17 +12,29 @@ const form = reactive({
 const honeypot = ref('')
 const errors = reactive<Record<string, string>>({})
 
-const isPhone = computed(() => form.way === 'Телефон')
+const isPhone = computed(() => wantsPhone(form.way))
 const contactLabel = computed(() => (isPhone.value ? 'Номер телефона' : `Ник в ${form.way}`))
 const contactHint = computed(() => (isPhone.value ? '+7 900 000-00-00' : '@username'))
 
-function validate() {
-  errors.name = form.name.trim().length < 2 ? 'Укажите имя' : ''
+watch(() => form.way, () => {
+  form.contact = ''
+  errors.contact = ''
+})
 
-  errors.contact = form.contact.trim().length < 5
-    ? (isPhone.value ? 'Укажите номер телефона' : 'Укажите ник')
-    : ''
-  errors.question = form.question.trim().length < 5 ? 'Напишите, что хотите узнать' : ''
+watch(() => form.contact, (value) => {
+  errors.contact = ''
+  if (!isPhone.value) return
+  const masked = formatPhone(value)
+  if (masked !== value) form.contact = masked
+})
+
+watch(() => form.name, () => { errors.name = '' })
+watch(() => form.question, () => { errors.question = '' })
+
+function validate() {
+  errors.name = nameError(form.name)
+  errors.contact = contactError(form.contact, form.way)
+  errors.question = questionError(form.question)
   return !errors.name && !errors.contact && !errors.question
 }
 async function onSubmit() {
@@ -73,6 +85,7 @@ async function onSubmit() {
             <input
               id="cs-contact" v-model="form.contact" class="cs__in" name="contact"
               :type="isPhone ? 'tel' : 'text'" :autocomplete="isPhone ? 'tel' : 'off'"
+              :inputmode="isPhone ? 'tel' : 'text'" :maxlength="isPhone ? 16 : 33"
               :placeholder="contactHint" :aria-invalid="!!errors.contact || undefined"
             >
           </div>
