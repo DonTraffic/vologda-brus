@@ -11,7 +11,7 @@ watch(isMenuOpen, (v) => {
 })
 onBeforeUnmount(() => { if (import.meta.client) document.body.style.overflow = '' })
 
-const headerMessengers = computed(() => MESSENGERS.filter(m => m.id !== 'whatsapp'))
+const headerMessengers = MESSENGERS
 </script>
 
 <template>

@@ -80,8 +80,6 @@ export default defineNuxtPlugin((nuxtApp) => {
     't.me': 'telegram',
     'telegram.me': 'telegram',
     'max.ru': 'max',
-    'wa.me': 'whatsapp',
-    'api.whatsapp.com': 'whatsapp',
   }
 
   document.addEventListener('click', (event) => {

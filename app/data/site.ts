@@ -18,8 +18,8 @@ export const ADDRESS = {
 
 export const WORK_HOURS = {
 
-  text: 'Пн–Пт 9:00–18:00',
-  schemaOrg: 'Mo-Fr 09:00-18:00',
+  text: 'Пн–Пт 8:00–17:00, сб и вс выходные',
+  schemaOrg: 'Mo-Fr 08:00-17:00',
 }
 
 export const LEGAL = {
@@ -51,13 +51,6 @@ export const MESSENGERS = [
     label: 'MAX',
     href: 'https://max.ru/join/1vDulaunJhWgeS-LkQpUcxO1oIgzEMIfZFQYOojQO-k',
     icon: 'max',
-  },
-  {
-    id: 'whatsapp',
-    label: 'WhatsApp',
-
-    href: `https://wa.me/${PHONE_HREF.replace('+', '')}`,
-    icon: 'whatsapp',
   },
 ] as const
 

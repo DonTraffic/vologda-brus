@@ -1,4 +1,4 @@
-const PHONE_WAYS = ['Телефон', 'WhatsApp']
+const PHONE_WAYS = ['Телефон']
 
 export function wantsPhone(way: string): boolean {
   return PHONE_WAYS.includes(way)
