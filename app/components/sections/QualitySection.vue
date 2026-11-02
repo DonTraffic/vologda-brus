@@ -51,7 +51,7 @@ const flipped = (i: number) => Math.floor(i / 2) % 2 === 1
     display: grid;
     gap: 20px;
     margin: 0; padding: 0; list-style: none;
-    align-items: start;
+    align-items: stretch;
 
     @include up(md) { grid-template-columns: 1fr 1fr; }
     @media (min-width: #{$t-bp-lg}) { gap: 0; }
@@ -90,6 +90,7 @@ const flipped = (i: number) => Math.floor(i / 2) % 2 === 1
   &__body {
     position: relative;
     display: flex;
+    flex: 1;
     flex-direction: column;
     justify-content: center;
     grid-column: 1;

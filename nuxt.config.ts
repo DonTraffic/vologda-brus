@@ -78,6 +78,8 @@ export default defineNuxtConfig({
   nitro: {
     preset: 'node-server',
 
+    compressPublicAssets: { gzip: true, brotli: true },
+
     prerender: {
       crawlLinks: true,
       routes: ['/', '/blog/', '/privacy-policy/', '/404/', '/sitemap.xml'],

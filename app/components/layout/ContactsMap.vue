@@ -5,6 +5,11 @@ const host = ref<HTMLElement | null>(null)
 const canvas = ref<HTMLElement | null>(null)
 const failed = ref(false)
 
+const routeHref = computed(() => {
+  if (ADDRESS.lat == null || ADDRESS.lon == null) return ''
+  return `https://yandex.ru/maps/?rtext=~${ADDRESS.lat},${ADDRESS.lon}&rtt=auto`
+})
+
 onMounted(() => {
   if (!host.value || ADDRESS.lat == null || ADDRESS.lon == null) return
 
@@ -81,6 +86,13 @@ onMounted(() => {
           <dt>Почта</dt>
           <dd><a :href="`mailto:${EMAIL}`">{{ EMAIL }}</a></dd>
         </dl>
+
+        <a
+          v-if="routeHref" class="cm__route" :href="routeHref"
+          target="_blank" rel="noopener noreferrer"
+        >
+          Проложить маршрут
+        </a>
 
         <p v-if="failed" class="cm__fallback">
           Карта не загрузилась — адрес выше можно скопировать в навигатор.
@@ -178,6 +190,20 @@ onMounted(() => {
   }
 
   &__fallback { margin: 0; font-size: 14px; color: rgba($c-white, 0.7); }
+
+  &__route {
+    display: inline-block;
+    margin-top: 18px;
+    padding: 12px 22px;
+    font-size: 15px;
+    font-weight: $fw-medium;
+    color: $c-green-900;
+    background: $c-tan-500;
+    transition: background-color $transition;
+    @include focus-ring;
+
+    &:hover { background: $c-tan-400; }
+  }
 
   &__credit {
     position: absolute;
