@@ -50,6 +50,7 @@ export default defineNuxtConfig({
     smtpUser: '',
     smtpPass: '',
     mailTo: '',
+    diagToken: '',
 
     public: {
       siteUrl: SITE_URL,
