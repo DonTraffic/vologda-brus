@@ -50,6 +50,8 @@ export default defineNuxtConfig({
     smtpUser: '',
     smtpPass: '',
     mailTo: '',
+    mailMode: 'smtp',
+    imapPort: '993',
     diagToken: '',
 
     public: {

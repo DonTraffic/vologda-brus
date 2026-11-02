@@ -71,19 +71,28 @@ export default defineEventHandler(async (event) => {
     ).join('')
   }</table>`
 
-  console.log(`[заявка] отправляю через ${smtp.host}:${smtp.port} на ${smtp.to}`)
+  const where = smtp.mode === 'imap'
+    ? `в ящик ${smtp.user} по IMAP (${smtp.host}:${smtp.imapPort})`
+    : `через ${smtp.host}:${smtp.port} на ${smtp.to}`
+  console.log(`[заявка] кладу ${where}`)
 
   try {
-    await getTransport(smtp).sendMail({
-      from: { name: 'Сайт Вологда Брус', address: smtp.user },
-      to: smtp.to,
-      subject,
-      text,
-      html,
-    })
+    if (smtp.mode === 'imap') {
+      const raw = await buildMessage(smtp, { subject, text, html })
+      await putInMailbox(smtp, raw)
+    }
+    else {
+      await getTransport(smtp).sendMail({
+        from: { name: 'Сайт Вологда Брус', address: smtp.user },
+        to: smtp.to,
+        subject,
+        text,
+        html,
+      })
+    }
   }
   catch (e) {
-    console.error('[заявка] письмо НЕ ушло:', e instanceof Error ? e.message : e)
+    console.error('[заявка] письмо НЕ доставлено:', e instanceof Error ? e.message : e)
     throw createError({
       statusCode: 502,
       statusMessage: 'Bad Gateway',
@@ -91,6 +100,6 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  console.log('[заявка] письмо отправлено')
+  console.log('[заявка] письмо доставлено')
   return { ok: true }
 })

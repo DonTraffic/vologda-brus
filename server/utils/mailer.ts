@@ -7,6 +7,8 @@ export interface SmtpSettings {
   user: string
   pass: string
   to: string
+  mode: 'smtp' | 'imap'
+  imapPort: number
 }
 
 let cached: Transporter | null = null
@@ -19,9 +21,11 @@ export function readSmtpSettings(event: H3Event): SmtpSettings | null {
   const pass = String(config.smtpPass || '')
   const port = Number(config.smtpPort) || 465
   const to = String(config.mailTo || '').trim() || user
+  const mode = String(config.mailMode || 'smtp').trim() === 'imap' ? 'imap' as const : 'smtp' as const
+  const imapPort = Number(config.imapPort) || 993
 
   if (!host || !user || !pass || !to) return null
-  return { host, port, user, pass, to }
+  return { host, port, user, pass, to, mode, imapPort }
 }
 
 export function getTransport(smtp: SmtpSettings): Transporter {
