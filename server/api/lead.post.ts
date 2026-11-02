@@ -71,6 +71,8 @@ export default defineEventHandler(async (event) => {
     ).join('')
   }</table>`
 
+  console.log(`[заявка] отправляю через ${smtp.host}:${smtp.port} на ${smtp.to}`)
+
   try {
     await getTransport(smtp).sendMail({
       from: { name: 'Сайт Вологда Брус', address: smtp.user },
@@ -81,7 +83,7 @@ export default defineEventHandler(async (event) => {
     })
   }
   catch (e) {
-    console.error('[lead] письмо не ушло:', e instanceof Error ? e.message : e)
+    console.error('[заявка] письмо НЕ ушло:', e instanceof Error ? e.message : e)
     throw createError({
       statusCode: 502,
       statusMessage: 'Bad Gateway',
@@ -89,5 +91,6 @@ export default defineEventHandler(async (event) => {
     })
   }
 
+  console.log('[заявка] письмо отправлено')
   return { ok: true }
 })
