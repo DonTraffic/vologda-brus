@@ -26,7 +26,7 @@ export default defineEventHandler(async (event) => {
   const pass = String(config.smtpPass ?? '')
   const to = String(config.mailTo ?? '').trim()
 
-  const ports = host ? await Promise.all([465, 587, 25, 443].map(p => probe(host, p))) : []
+  const ports = host ? await Promise.all([465, 587, 25, 443, 993, 143].map(p => probe(host, p))) : []
 
   const web = await Promise.all([
     probe('go1.unisender.ru', 443),
@@ -49,6 +49,9 @@ export default defineEventHandler(async (event) => {
           [`${host}:25`]: ports[2],
         }
       : 'сервер не задан, проверять нечего',
+    ящикНапрямую: host
+      ? { [`${host}:993`]: ports[4], [`${host}:143`]: ports[5] }
+      : 'сервер не задан',
     обычныйИнтернет: {
       [`${host || 'сервер'}:443`]: host ? ports[3] : 'сервер не задан',
       'go1.unisender.ru:443': web[0],
