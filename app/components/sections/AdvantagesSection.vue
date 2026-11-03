@@ -38,17 +38,17 @@ import { ADVANTAGES } from '~/data/content'
     display: grid;
     gap: 20px;
     margin: 0; padding: 0; list-style: none;
-    grid-template-columns: repeat(2, 1fr);
-
-    @include up(md) { grid-template-columns: repeat(4, 1fr); }
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   }
 
   &__card {
     display: grid;
     place-items: center;
-    min-height: 204px;
-    padding: 30px;
+    min-height: 160px;
+    padding: clamp(20px, 3vw, 30px);
     background: $c-mint-100;
+
+    @include up(md) { min-height: 204px; }
   }
 
   &__text {

@@ -17,6 +17,8 @@ export default defineNitroPlugin((nitro) => {
       setHeader(event, name, value)
     }
 
+    if (import.meta.prerender) return
+
     const { pathname, search } = getRequestURL(event)
 
     const host = getRequestHost(event, { xForwardedHost: true }) || ''

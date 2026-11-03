@@ -17,12 +17,14 @@ const { open: openMessengers } = useMessengerModal()
 
       <p class="hero__lead">{{ HERO.lead }}</p>
 
-      <a href="#calc" class="hero__btn hero__btn--outline" @click.prevent="openMessengers()">
-        {{ HERO.primaryCta }}
-      </a>
-      <a href="#calc" class="hero__btn hero__btn--solid" @click.prevent="openMessengers()">
-        {{ HERO.secondaryCta }}
-      </a>
+      <div class="hero__cta">
+        <a href="#calc" class="hero__btn hero__btn--outline" @click.prevent="openMessengers()">
+          {{ HERO.primaryCta }}
+        </a>
+        <a href="#calc" class="hero__btn hero__btn--solid" @click.prevent="openMessengers()">
+          {{ HERO.secondaryCta }}
+        </a>
+      </div>
 
       <div class="hero__inset">
         <BeforeAfter
@@ -80,12 +82,28 @@ const { open: openMessengers } = useMessengerModal()
 
   &__stage {
     display: flex;
-    flex-direction: column;
+    flex-wrap: wrap;
     align-items: flex-start;
+    align-content: flex-start;
     gap: $space-sm;
-    width: min(#{$stage-w}, 100%);
+    width: 100%;
+    max-width: 1240px;
     margin-inline: auto;
     padding: $space-xl $gutter $space-2xl;
+
+    @media (min-width: #{$t-bp-md}) { padding-inline: 20px; }
+  }
+
+  &__title,
+  &__lead,
+  &__cta,
+  &__inset { flex: 0 0 100%; }
+
+  &__cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $space-sm;
+    max-width: 640px;
   }
 
   &__title {
@@ -108,6 +126,7 @@ const { open: openMessengers } = useMessengerModal()
   }
 
   &__btn {
+    flex: 1 1 260px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -139,17 +158,20 @@ const { open: openMessengers } = useMessengerModal()
 
   &__inset {
     width: 100%;
-    max-width: map.get($hero-inset, w);
+    max-width: min(100%, 640px);
     margin-top: $space-xs;
   }
 
   &__box { display: none; }
 
   &__label {
+    flex: 1 1 150px;
     display: flex;
     flex-direction: column;
+    justify-content: center;
     gap: 2px;
-    padding: 10px 14px;
+    min-height: 68px;
+    padding: 12px 16px;
     font-size: 16px;
     font-weight: $fw-semibold;
     line-height: 1.1;
@@ -162,6 +184,8 @@ const { open: openMessengers } = useMessengerModal()
   &__scroll { display: none; }
 
   @include up(lg) {
+    &__cta { display: contents; }
+
     &__stage {
       --k: tan(atan2(100vw, #{$stage-w}));
 
