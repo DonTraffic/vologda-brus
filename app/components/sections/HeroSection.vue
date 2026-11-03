@@ -67,6 +67,8 @@ const { open: openMessengers } = useMessengerModal()
 .hero {
   position: relative;
   isolation: isolate;
+  display: grid;
+  align-content: center;
   color: $c-white;
   background: $c-green-900;
 
