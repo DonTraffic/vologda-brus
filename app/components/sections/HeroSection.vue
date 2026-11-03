@@ -39,15 +39,17 @@ const { open: openMessengers } = useMessengerModal()
       <div v-for="(s, i) in HERO_STATS.items" :key="`b${i}`"
            class="hero__box" :class="`hero__box--${i + 1}`" aria-hidden="true" />
 
-      <p class="hero__label hero__label--feature">
-        <span>{{ HERO_STATS.feature.value }}</span>
-        <span>{{ HERO_STATS.feature.label }}</span>
-      </p>
-      <p v-for="(s, i) in HERO_STATS.items" :key="s.label"
-         class="hero__label" :class="`hero__label--${i + 1}`">
-        <span>{{ s.value }}</span>
-        <span>{{ s.label }}</span>
-      </p>
+      <div class="hero__stats">
+        <p class="hero__label hero__label--feature">
+          <span>{{ HERO_STATS.feature.value }}</span>
+          <span>{{ HERO_STATS.feature.label }}</span>
+        </p>
+        <p v-for="(s, i) in HERO_STATS.items" :key="s.label"
+           class="hero__label" :class="`hero__label--${i + 1}`">
+          <span>{{ s.value }}</span>
+          <span>{{ s.label }}</span>
+        </p>
+      </div>
 
       <a href="#experts" class="hero__scroll" aria-label="К следующему разделу">
         <svg viewBox="0 0 39 20" width="39" height="20" fill="none" aria-hidden="true">
@@ -81,10 +83,9 @@ const { open: openMessengers } = useMessengerModal()
   }
 
   &__stage {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: flex-start;
-    align-content: flex-start;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: start;
     gap: $space-sm;
     width: 100%;
     max-width: 1240px;
@@ -94,16 +95,20 @@ const { open: openMessengers } = useMessengerModal()
     @media (min-width: #{$t-bp-md}) { padding-inline: 20px; }
   }
 
-  &__title,
-  &__lead,
-  &__cta,
-  &__inset { flex: 0 0 100%; }
-
   &__cta {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
     gap: $space-sm;
-    max-width: 640px;
+    width: 100%;
+    max-width: 660px;
+  }
+
+  &__stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
+    gap: 10px;
+    width: 100%;
+    max-width: 660px;
   }
 
   &__title {
@@ -126,7 +131,6 @@ const { open: openMessengers } = useMessengerModal()
   }
 
   &__btn {
-    flex: 1 1 260px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -158,14 +162,13 @@ const { open: openMessengers } = useMessengerModal()
 
   &__inset {
     width: 100%;
-    max-width: min(100%, 640px);
+    max-width: min(100%, 660px);
     margin-top: $space-xs;
   }
 
   &__box { display: none; }
 
   &__label {
-    flex: 1 1 150px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -184,7 +187,8 @@ const { open: openMessengers } = useMessengerModal()
   &__scroll { display: none; }
 
   @include up(lg) {
-    &__cta { display: contents; }
+    &__cta,
+    &__stats { display: contents; }
 
     &__stage {
       --k: tan(atan2(100vw, #{$stage-w}));
@@ -229,6 +233,7 @@ const { open: openMessengers } = useMessengerModal()
     }
 
     &__label {
+      min-height: 0;
       padding: 0;
       background: none;
       border: 0;
