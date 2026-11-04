@@ -33,7 +33,14 @@ onMounted(() => {
       })
       const pin = document.createElement('span')
       pin.className = 'cm__pin'
-      new Marker({ element: pin, anchor: 'bottom' })
+      pin.setAttribute('aria-hidden', 'true')
+      const mark = document.createElement('img')
+      mark.src = '/images/header.svg'
+      mark.alt = ''
+      mark.width = 1032
+      mark.height = 582
+      pin.appendChild(mark)
+      new Marker({ element: pin, anchor: 'bottom', offset: [0, -8] })
         .setLngLat([ADDRESS.lon!, ADDRESS.lat!])
         .addTo(map)
 
@@ -242,21 +249,33 @@ onMounted(() => {
 }
 
 :global(.cm__pin) {
+  position: relative;
   display: block;
-  width: 28px;
-  height: 28px;
-  background: $c-tan-500;
-  border-radius: 50% 50% 50% 0;
-  box-shadow: 0 0 0 6px rgba($c-tan-500, 0.3), 0 3px 10px rgba($c-brown-900, 0.45);
-  transform: rotate(-45deg) translate(6px, -6px);
+  width: 104px;
+  padding: 9px 10px;
+  background: $c-green-800;
+  border: 2px solid $c-tan-500;
+  border-radius: 3px;
+  box-shadow: 0 6px 18px rgba($c-green-900, 0.45);
 }
 
-:global(.cm__pin)::after {
+:global(.cm__pin img) {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+:global(.cm__pin::after) {
   content: '';
   position: absolute;
-  inset: 9px;
-  background: $c-green-900;
-  border-radius: 50%;
+  bottom: -8px;
+  left: 50%;
+  width: 13px;
+  height: 13px;
+  background: $c-green-800;
+  border-right: 2px solid $c-tan-500;
+  border-bottom: 2px solid $c-tan-500;
+  transform: translateX(-50%) rotate(45deg);
 }
 
 :global(.maplibregl-ctrl-logo) { display: none; }
