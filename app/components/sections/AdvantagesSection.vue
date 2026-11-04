@@ -38,7 +38,10 @@ import { ADVANTAGES } from '~/data/content'
     display: grid;
     gap: 20px;
     margin: 0; padding: 0; list-style: none;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: minmax(0, 1fr);
+
+    @include up(xs) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    @media (min-width: #{$t-bp-lg}) { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   }
 
   &__card {
