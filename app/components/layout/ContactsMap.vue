@@ -25,9 +25,9 @@ onMounted(() => {
       if (!canvas.value) return
       const map = new Map({
         container: canvas.value,
-        style: 'https://tiles.openfreemap.org/styles/dark',
+        style: 'https://tiles.openfreemap.org/styles/liberty',
         center: [ADDRESS.lon!, ADDRESS.lat!],
-        zoom: 13.6,
+        zoom: 15.2,
         attributionControl: false,
         cooperativeGestures: true,
       })
@@ -211,14 +211,33 @@ onMounted(() => {
     bottom: 12px;
     z-index: 2;
     margin: 0;
+    padding: 2px 8px;
     font-size: 12px;
-    color: rgba($c-white, 0.6);
+    color: rgba($c-brown-900, 0.75);
+    background: rgba($c-white, 0.7);
+    border-radius: 2px;
 
     a { color: inherit; text-decoration: underline; }
   }
 
   @include up(md) {
     &__card { padding-block: $space-md; }
+  }
+
+  @media (max-width: #{$t-bp-lg - 1}) {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 0;
+
+    &__inner { order: 1; }
+    &__veil { display: none; }
+
+    &__map {
+      position: relative;
+      order: 2;
+      height: 320px;
+      margin-top: 28px;
+    }
   }
 }
 
@@ -228,7 +247,7 @@ onMounted(() => {
   height: 28px;
   background: $c-tan-500;
   border-radius: 50% 50% 50% 0;
-  box-shadow: 0 0 0 6px rgba($c-tan-500, 0.25);
+  box-shadow: 0 0 0 6px rgba($c-tan-500, 0.3), 0 3px 10px rgba($c-brown-900, 0.45);
   transform: rotate(-45deg) translate(6px, -6px);
 }
 
@@ -239,4 +258,6 @@ onMounted(() => {
   background: $c-green-900;
   border-radius: 50%;
 }
+
+:global(.maplibregl-ctrl-logo) { display: none; }
 </style>
