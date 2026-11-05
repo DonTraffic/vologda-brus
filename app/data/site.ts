@@ -52,6 +52,12 @@ export const MESSENGERS = [
     href: 'https://max.ru/join/1vDulaunJhWgeS-LkQpUcxO1oIgzEMIfZFQYOojQO-k',
     icon: 'max',
   },
+  {
+    id: 'whatsapp',
+    label: 'WhatsApp',
+    href: `https://wa.me/${PHONE_HREF.replace('+', '')}`,
+    icon: 'whatsapp',
+  },
 ] as const
 
 export const SOCIAL = [

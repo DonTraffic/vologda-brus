@@ -32,7 +32,7 @@ const headerMessengers = MESSENGERS
         <ul class="hdr__msgs" role="list">
           <li v-for="m in headerMessengers" :key="m.id">
             <a :href="m.href" class="hdr__msg" target="_blank" rel="noopener noreferrer" :aria-label="m.label">
-              <IconMessenger :name="m.icon === 'max' ? 'max' : 'telegram'" :size="30" />
+              <IconMessenger :name="m.icon" :size="30" />
             </a>
           </li>
         </ul>
