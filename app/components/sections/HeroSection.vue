@@ -74,8 +74,10 @@ const { open: openMessengers } = useMessengerModal()
 
   --k: tan(atan2(100vw, #{$stage-w}));
   min-height: max(100vh, calc(#{$stage-h} * var(--k, 1)));
+  height: 100vhs;
 
   &__bg {
+    height: 100%;
     position: absolute;
     inset: 0;
     z-index: -1;

@@ -12,6 +12,7 @@ export const ADDRESS = {
   full: 'г. Вологда, Московское шоссе, 44',
 
   postalCode: '160033',
+  sales: '160033, г. Вологда, Московское шоссе, 44, офис 8, 2 этаж',
   lat: 59.182418 as number | null,
   lon: 39.955073 as number | null,
 }
@@ -20,15 +21,6 @@ export const WORK_HOURS = {
 
   text: 'Пн–Пт 8:00–17:00, сб и вс выходные',
   schemaOrg: 'Mo-Fr 08:00-17:00',
-}
-
-export const LEGAL = {
-  name: 'ИП Виноградов Алексей Михайлович',
-  shortName: 'ИП Виноградов А. М.',
-  inn: '350701926897',
-  ogrnip: '326350000007560',
-
-  addressLegal: '160022, г. Вологда, ул. Преминина, 10Б, кв. 212',
 }
 
 export const COMPANY = {

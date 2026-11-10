@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { FOOTER_NAV, PHONE_DISPLAY, PHONE_HREF, EMAIL, ADDRESS, COMPANY, LEGAL } from '~/data/site'
+import { FOOTER_NAV, PHONE_DISPLAY, PHONE_HREF, EMAIL, ADDRESS, COMPANY } from '~/data/site'
 
 const year = new Date().getFullYear()
 function toTop() { window.scrollTo({ top: 0, behavior: 'smooth' }) }
@@ -32,11 +32,6 @@ function toTop() { window.scrollTo({ top: 0, behavior: 'smooth' }) }
           </nav>
         </div>
       </div>
-
-      <p class="ft__legal">
-        {{ LEGAL.name }}<br>
-        ИНН {{ LEGAL.inn }}<span v-if="LEGAL.ogrnip"> · ОГРНИП {{ LEGAL.ogrnip }}</span>
-      </p>
 
       <div class="ft__bottom">
         <p class="ft__copy">
@@ -84,7 +79,6 @@ function toTop() { window.scrollTo({ top: 0, behavior: 'smooth' }) }
 
   &__rule { height: 1px; margin-block: $space-lg; background: $c-tan-500; }
 
-  &__legal { margin-top: $space-md; font-size: 13px; line-height: 18px; color: rgba($c-mint-300, 0.8); }
 
   @include up(lg) {
     &__cols {

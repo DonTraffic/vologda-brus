@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { COMPANY, PHONE_HREF, EMAIL, ADDRESS, WORK_HOURS, LEGAL, SOCIAL } from '~/data/site'
+import { COMPANY, PHONE_HREF, EMAIL, ADDRESS, WORK_HOURS, SOCIAL } from '~/data/site'
 
 const config = useRuntimeConfig()
 const base = (config.public.siteUrl as string).replace(/\/$/, '')
@@ -27,10 +27,6 @@ const organisation = computed(() => ({
   openingHours: WORK_HOURS.schemaOrg,
   image: `${base}/images/hero-01-1600.webp`,
   sameAs: SOCIAL.map(s => s.href),
-  legalName: LEGAL.name,
-  taxID: LEGAL.inn,
-
-  ...(LEGAL.ogrnip ? { identifier: LEGAL.ogrnip } : {}),
 }))
 
 useHead({

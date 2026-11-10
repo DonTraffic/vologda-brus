@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ADDRESS, PHONE_DISPLAY, PHONE_HREF, EMAIL, LEGAL, WORK_HOURS, COMPANY } from '~/data/site'
+import { ADDRESS, PHONE_DISPLAY, PHONE_HREF, EMAIL, WORK_HOURS, COMPANY } from '~/data/site'
 
 const host = ref<HTMLElement | null>(null)
 const canvas = ref<HTMLElement | null>(null)
@@ -71,15 +71,9 @@ onMounted(() => {
       <div class="cm__card">
         <h2 id="cm-title" class="cm__title">Контакты {{ COMPANY.name }}</h2>
 
-        <p class="cm__legal">
-          {{ LEGAL.name }}<br>
-          ИНН {{ LEGAL.inn }}<br>
-          ОГРНИП {{ LEGAL.ogrnip }}
-        </p>
-
         <dl class="cm__list">
-          <dt>Юридический адрес</dt>
-          <dd>{{ LEGAL.addressLegal }}</dd>
+          <dt>Отдел продаж</dt>
+          <dd>{{ ADDRESS.sales }}</dd>
 
           <dt>Производство</dt>
           <dd>{{ ADDRESS.postalCode }}, {{ ADDRESS.full }}</dd>
@@ -158,13 +152,6 @@ onMounted(() => {
     font-weight: $fw-semibold;
     line-height: 1.2;
     color: $c-tan-500;
-  }
-
-  &__legal {
-    margin: 0 0 $space-lg;
-    font-size: 15px;
-    line-height: 23px;
-    color: rgba($c-white, 0.78);
   }
 
   &__list {
