@@ -14,14 +14,14 @@ const lines = (e: typeof EXPERTS[number]) => [e.experience, ...e.duties, `«${e.
           v-for="(e, i) in EXPERTS" :key="e.name" class="ex__item"
           v-reveal="{ style: 'right', delay: i * 0.16 }"
         >
-          <div class="ex__card">
-            <div class="ex__photo">
-            <SmartImage
-              :name="e.photo"
-              :alt="`${e.name} — ${e.role.toLowerCase()}, ${COMPANY.name}`"
-              cover
-              sizes="(min-width: 1024px) 260px, 45vw"
-            />
+        <div class="ex__card" :class="{ 'ex__card--plain': e.photo === '' }">
+            <div class="ex__photo" v-if="e.photo != ''">
+                <SmartImage
+                    :name="e.photo"
+                    :alt="`${e.name} — ${e.role.toLowerCase()}, ${COMPANY.name}`"
+                    cover
+                    sizes="(min-width: 1024px) 260px, 45vw"
+                />
             </div>
             <div class="ex__body">
               <h3 class="ex__name">{{ e.name }}</h3>
@@ -68,6 +68,12 @@ const lines = (e: typeof EXPERTS[number]) => [e.experience, ...e.duties, `«${e.
 
     @container (min-width: 420px) {
       grid-template-columns: minmax(0, 0.8fr) minmax(0, 1fr);
+    }
+
+    &--plain {
+      @container (min-width: 420px) {
+        grid-template-columns: minmax(0, 1fr);
+      }
     }
   }
 

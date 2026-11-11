@@ -110,7 +110,7 @@ export const STEPS = {
     },
     {
       title: 'Бронирование биндера',
-      meta: 'Аванс 100 000 ₽',
+      meta: '',
       text: 'Фиксируем место в графике. Бронируем биндер.\nГарантия старта через 1–2 недели.',
     },
     {
@@ -230,9 +230,58 @@ export const PROJECTS = {
   ],
 }
 
+export interface StripItem {
+  name: string
+  type: 'image' | 'video'
+}
+
 export const PRODUCTION_STRIP = {
   title: 'Производство изнутри',
-  items: Array.from({ length: 13 }, (_, i) => `proj-other-${String(i + 1).padStart(2, '0')}`),
+  items: [
+    { name: 'prod-01', type: 'image' },
+    { name: 'prod-02', type: 'image' },
+    { name: 'prod-03', type: 'image' },
+    { name: 'prod-04', type: 'image' },
+    { name: 'prod-05', type: 'image' },
+    { name: 'prod-06', type: 'image' },
+    { name: 'prod-video-01', type: 'video' },
+    { name: 'prod-07', type: 'image' },
+    { name: 'prod-08', type: 'image' },
+    { name: 'prod-09', type: 'image' },
+    { name: 'prod-10', type: 'image' },
+    { name: 'prod-11', type: 'image' },
+    { name: 'prod-12', type: 'image' },
+    { name: 'prod-video-02', type: 'video' },
+    { name: 'prod-13', type: 'image' },
+    { name: 'prod-14', type: 'image' },
+    { name: 'prod-15', type: 'image' },
+    { name: 'prod-16', type: 'image' },
+    { name: 'prod-17', type: 'image' },
+    { name: 'prod-18', type: 'image' },
+    { name: 'prod-video-03', type: 'video' },
+    { name: 'prod-19', type: 'image' },
+    { name: 'prod-20', type: 'image' },
+    { name: 'prod-21', type: 'image' },
+    { name: 'prod-22', type: 'image' },
+    { name: 'prod-23', type: 'image' },
+    { name: 'prod-24', type: 'image' },
+    { name: 'prod-video-04', type: 'video' },
+    { name: 'prod-25', type: 'image' },
+    { name: 'prod-26', type: 'image' },
+    { name: 'prod-27', type: 'image' },
+    { name: 'prod-28', type: 'image' },
+    { name: 'prod-29', type: 'image' },
+    { name: 'prod-30', type: 'image' },
+    { name: 'prod-video-05', type: 'video' },
+    { name: 'prod-31', type: 'image' },
+    { name: 'prod-32', type: 'image' },
+    { name: 'prod-33', type: 'image' },
+    { name: 'prod-34', type: 'image' },
+    { name: 'prod-video-06', type: 'video' },
+    { name: 'proj-other-11', type: 'image' },
+    { name: 'proj-other-12', type: 'image' },
+    { name: 'proj-other-13', type: 'image' },
+  ] as StripItem[],
 }
 
 export const CALC_FORM = {

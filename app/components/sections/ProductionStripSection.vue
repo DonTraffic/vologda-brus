@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { PRODUCTION_STRIP } from '~/data/content'
+import { PRODUCTION_STRIP, type StripItem } from '~/data/content'
 import imagesManifest from '~/data/images.json'
 
 const images = (imagesManifest as { default?: Record<string, { w: number; h: number }> }).default
@@ -10,24 +10,71 @@ const widthOf = (name: string) => {
   return m && m.h ? Math.round((m.w / m.h) * 500) : 667
 }
 
+const label = (item: StripItem, i: number) =>
+  item.type === 'video'
+    ? `Производство клееного бруса в Вологде — видео ${i + 1}`
+    : `Производство клееного бруса в Вологде — кадр ${i + 1}`
+
 const { el: strip, scrollByCards } = useCarousel({ interval: 5000, gap: 20 })
+const lightbox = ref<{ open: (i: number) => void } | null>(null)
+
+function show(i: number) {
+  strip.value?.querySelectorAll('video').forEach(v => v.pause())
+  lightbox.value?.open(i)
+}
+
+onMounted(() => {
+  const node = strip.value
+  if (!node || !('IntersectionObserver' in window)) return
+
+  const io = new IntersectionObserver((entries) => {
+    for (const e of entries) {
+      const video = e.target as HTMLVideoElement
+      if (e.isIntersecting) video.play().catch(() => {})
+      else video.pause()
+    }
+  }, { threshold: 0.5 })
+
+  node.querySelectorAll('video').forEach(v => io.observe(v))
+  onBeforeUnmount(() => io.disconnect())
+})
 </script>
 
 <template>
   <section class="ps" aria-label="Производство изнутри">
     <ul ref="strip" class="ps__strip" role="list">
       <li
-        v-for="(name, i) in PRODUCTION_STRIP.items"
-        :key="name"
+        v-for="(item, i) in PRODUCTION_STRIP.items"
+        :key="item.name"
         class="ps__item"
-        :style="`--w: ${widthOf(name)}px`"
+        :style="`--w: ${widthOf(item.name)}px`"
       >
-        <SmartImage
-          :name="name"
-          :alt="`Производство клееного бруса в Вологде — кадр ${i + 1}`"
-          cover
-          sizes="(min-width: 1201px) 667px, 70vw"
-        />
+        <button type="button" class="ps__open" :aria-label="`Открыть: ${label(item, i)}`" @click="show(i)">
+          <video
+            v-if="item.type === 'video'"
+            class="ps__video"
+            :src="`/videos/${item.name}.mp4`"
+            :poster="`/images/${item.name}-640.webp`"
+            muted
+            loop
+            playsinline
+            preload="none"
+          />
+
+          <SmartImage
+            v-else
+            :name="item.name"
+            :alt="label(item, i)"
+            cover
+            sizes="(min-width: 1201px) 667px, 70vw"
+          />
+
+          <span v-if="item.type === 'video'" class="ps__play" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M8 5v14l11-7z" />
+            </svg>
+          </span>
+        </button>
       </li>
     </ul>
 
@@ -43,6 +90,8 @@ const { el: strip, scrollByCards } = useCarousel({ interval: 5000, gap: 20 })
         </svg>
       </button>
     </div>
+
+    <MediaLightbox ref="lightbox" :items="PRODUCTION_STRIP.items" :label="label" />
   </section>
 </template>
 
@@ -77,9 +126,42 @@ const { el: strip, scrollByCards } = useCarousel({ interval: 5000, gap: 20 })
     background: $c-sand;
 
     @media (min-width: #{$t-bp-lg}) { width: var(--w); height: 500px; }
+  }
+
+  &__open {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
+    cursor: zoom-in;
+    @include focus-ring($c-tan-500);
 
     :deep(picture) { display: block; width: 100%; height: 100%; }
     :deep(img) { width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
+  }
+
+  &__video {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none;
+    background: $c-sand;
+  }
+
+  &__play {
+    position: absolute;
+    right: 12px;
+    bottom: 12px;
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    padding-left: 2px;
+    color: $c-green-900;
+    background: rgba($c-tan-500, 0.92);
+    border-radius: 50%;
+    pointer-events: none;
   }
 
   &__controls {
